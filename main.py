@@ -1,25 +1,47 @@
 import pygame as pg
+import aliments as al
 
-GAME_NAME = "test"
+GAME_NAME = "Eat and never run"
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
-## SETUP ##
 pg.init()
-SCREEN = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
-pg.display.set_caption(GAME_NAME)
 
-RUNNING = True
+screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
-while RUNNING:
+pg.display.flip()
 
-    SCREEN.fill((255, 255, 255))
+def main():
 
-    pg.display.flip()
+    CLOCK = pg.time.Clock()
 
-    for event in pg.event.get():
-        if event.type == pg.QUIT:
-            running = False
+    # Ajout des aliments
+    pg.time.set_timer(pg.USEREVENT, 1000)
 
-pg.quit()
+    running = True
+
+    while running:
+
+        screen.fill((255, 255, 255))
+
+        # Update and draw aliments
+        for food in al.FOOD_LIST:
+            food.draw(screen)
+        al.FOOD_LIST.update()
+
+        # Update and draw bras
+
+        pg.display.flip()
+        CLOCK.tick(30)
+
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                running = False
+            if event.type == pg.USEREVENT:
+                al.create_new_aliment()
+
+    pg.quit()
+
+if __name__ == '__main__':
+    main()
