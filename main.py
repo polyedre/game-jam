@@ -6,6 +6,8 @@ GAME_NAME = "Eat and never run"
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
+GRAB_DISTANCE = 50
+
 pg.init()
 
 screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
@@ -36,7 +38,14 @@ def main():
                 running = False
             if event.type == pg.USEREVENT:
                 al.create_new_aliment()
-
+            if event.type == pg.MOUSEBUTTONDOWN:
+                mouse = pg.math.Vector2(pg.mouse.get_pos())
+                for food in al.FOOD_LIST:
+                    center = pg.math.Vector2(food.rect.center)
+                    if (center - mouse).length() < GRAB_DISTANCE:
+                        food.grabbed = True
+            if event.type == pg.MOUSEBUTTONUP:
+                pass
     pg.quit()
 
 if __name__ == '__main__':

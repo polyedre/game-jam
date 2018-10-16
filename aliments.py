@@ -28,15 +28,19 @@ class Aliment(pg.sprite.Sprite):
         self.rect = pg.Rect(*_position, _size, _size)
         self.image = pg.transform.scale(pg.image.load(img_name), (50, 50))
 
+        self.grabbed = False
 
     def update(self):
         "Met à jour les positions et vitesses de l'objet"
         self.remove_if_out()
 
-        self.acceleration += GRAVITY
-        self.vitesse += self.acceleration
-        self.rect.move_ip(*self.vitesse)
-        self.acceleration *= 0
+        if self.grabbed:
+            self.rect.center = pg.mouse.get_pos()
+        else:
+            self.acceleration += GRAVITY
+            self.vitesse += self.acceleration
+            self.rect.move_ip(*self.vitesse)
+            self.acceleration *= 0
 
     def remove_if_out(self):
         "Supprime l'aliment si il sort de l'écran."
