@@ -6,7 +6,8 @@ GAME_NAME = "Eat and never run"
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
-GRAB_DISTANCE = 50
+MEM_MOUSE_EVENT = pg.USEREVENT + 1
+MEM_MOUSE_EVENT_TIME = 100
 
 pg.init()
 
@@ -18,6 +19,7 @@ def main():
 
     # Ajout des aliments
     pg.time.set_timer(pg.USEREVENT, 1000)
+    pg.time.set_timer(MEM_MOUSE_EVENT, MEM_MOUSE_EVENT_TIME)
 
     running = True
 
@@ -27,7 +29,7 @@ def main():
 
         al.FOOD_LIST.draw(screen)
         al.FOOD_LIST.update()
-
+        al.updateMouseHistory()
         # Update and draw bras
 
         pg.display.flip()
@@ -36,16 +38,19 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
+
             if event.type == pg.USEREVENT:
                 al.create_new_aliment()
+
             if event.type == pg.MOUSEBUTTONDOWN:
-                mouse = pg.math.Vector2(pg.mouse.get_pos())
-                for food in al.FOOD_LIST:
-                    center = pg.math.Vector2(food.rect.center)
-                    if (center - mouse).length() < GRAB_DISTANCE:
-                        food.grabbed = True
+                al.handleGrab()
+
             if event.type == pg.MOUSEBUTTONUP:
-                pass
+                al.handleUngrab()
+
+            if event.type == MEM_MOUSE_EVENT:
+                al.updateMouseHistory()
+
     pg.quit()
 
 if __name__ == '__main__':

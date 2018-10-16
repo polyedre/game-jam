@@ -4,10 +4,13 @@
 import pygame as pg
 import random
 
-from main import GAME_NAME, SCREEN_HEIGHT, SCREEN_WIDTH
+from main import GAME_NAME, SCREEN_HEIGHT, SCREEN_WIDTH, MEM_MOUSE_EVENT_TIME
 
 FOOD_LIST = pg.sprite.Group()
-GRAVITY = pg.math.Vector2(0,0)
+GRAVITY = pg.math.Vector2(0, 0.05)
+GRAB_DISTANCE = 50
+
+mouse_history = [(0, 0), (0, 0)]
 
 class Aliment(pg.sprite.Sprite):
     """
@@ -76,6 +79,26 @@ def create_new_aliment(pos=None, vitesse=None,
     aliment = Aliment(pos, vitesse, healthy, size)
 
     FOOD_LIST.add(aliment)
+
+
+def updateMouseHistory():
+    mouse_history[1] = mouse_history[0]
+    mouse_history[0] = pg.mouse.get_pos()
+
+def handleGrab():
+    "Update food that are grabbed."
+    mouse = pg.math.Vector2(pg.mouse.get_pos())
+    for food in FOOD_LIST:
+        center = pg.math.Vector2(food.rect.center)
+        if (center - mouse).length() < GRAB_DISTANCE:
+            food.grabbed = True
+            food.vitesse *= 0
+
+def handleUngrab():
+    for food in [f for f in FOOD_LIST if f.grabbed]:
+        food.grabbed = False
+        speed = pg.Vector2(mouse_history[0]) - pg.Vector2(mouse_history[1])
+        food.vitesse = speed / MEM_MOUSE_EVENT_TIME * 30
 
 if __name__ == '__main__':
     pass
