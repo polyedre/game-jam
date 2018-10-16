@@ -1,6 +1,8 @@
 import pygame as pg
 import aliments as al
 
+import gui
+
 GAME_NAME = "Eat and never run"
 
 SCREEN_WIDTH = 800
@@ -30,6 +32,12 @@ def main():
         al.FOOD_LIST.draw(screen)
         al.FOOD_LIST.update()
         al.updateMouseHistory()
+
+        # GUI
+
+        for element in gui.GUI_LIST:
+            element.draw(screen)
+
         # Update and draw bras
 
         pg.display.flip()
