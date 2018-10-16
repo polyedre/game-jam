@@ -22,11 +22,8 @@ class Aliment(pg.sprite.Sprite):
         self.vitesse = pg.math.Vector2(_vitesse)
         self.acceleration = pg.math.Vector2(0, 0)
 
-        self.image = pg.Surface([_size,_size])
-        self.image.fill((0, 0, 0))
-
-        self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = _position
+        self.rect = pg.Rect(*_position, width = _size, height = _size)
+        self.image = pg.transform.scale(pg.image.load("./imgs/hamburger.png"), (50, 50))
 
 
     def update(self):
@@ -38,14 +35,8 @@ class Aliment(pg.sprite.Sprite):
         self.rect.move_ip(*self.vitesse)
         self.acceleration *= 0
 
-
-    def draw(self, screen):
-        "Dessine l'aliment sur l'écran 'screen'"
-        color = ((100, 255, 100) if self.is_healthy else (255, 100, 100))
-        pg.draw.ellipse(screen, color, self.rect)
-
     def remove_if_out(self):
-
+        "Supprime l'aliment si il sort de l'écran."
         if self.rect.x < -100 or self.rect.x > SCREEN_WIDTH + 100\
            or self.rect.y > SCREEN_HEIGHT + 100:
             FOOD_LIST.remove(self)
@@ -55,7 +46,7 @@ class Aliment(pg.sprite.Sprite):
 def create_new_aliment(pos=None, vitesse=None,
                        healthy=None, size=None):
     """
-    Créé un nouvel aliment et l'ajoute à la liste des aliements.
+    Créé un nouvel aliment et l'ajoute à la liste des aliments.
     Si aucun argument n'est passé en paramètre, la fonction se charge
     de les créer de façon aléatoire.
     """

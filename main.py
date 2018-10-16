@@ -23,9 +23,7 @@ def main():
 
         screen.fill((255, 255, 255))
 
-        # Update and draw aliments
-        for food in al.FOOD_LIST:
-            food.draw(screen)
+        al.FOOD_LIST.draw(screen)
         al.FOOD_LIST.update()
 
         # Update and draw bras
