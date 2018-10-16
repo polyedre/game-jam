@@ -7,7 +7,7 @@ import random
 from main import GAME_NAME, SCREEN_HEIGHT, SCREEN_WIDTH, MEM_MOUSE_EVENT_TIME
 
 FOOD_LIST = pg.sprite.Group()
-GRAVITY = pg.math.Vector2(0, 0.05)
+GRAVITY = pg.math.Vector2(0, 0.3)
 GRAB_DISTANCE = 50
 
 mouse_history = [(0, 0), (0, 0)]
@@ -52,7 +52,6 @@ class Aliment(pg.sprite.Sprite):
             FOOD_LIST.remove(self)
 
 
-
 def create_new_aliment(pos=None, vitesse=None,
                        healthy=None, size=None):
     """
@@ -62,12 +61,12 @@ def create_new_aliment(pos=None, vitesse=None,
     """
     if not pos:
         pos_x = random.choice([-100, SCREEN_WIDTH + 100])
-        pos_y = random.randint(100, 600)
+        pos_y = random.randint(50, SCREEN_HEIGHT / 2)
         pos = (pos_x, pos_y)
 
     if not vitesse:
-        vitesse_y = random.randint(-3, 0)
-        vitesse_x = (10 if pos[0] < 0 else -10)
+        vitesse_y = random.randint(-12, -7)
+        vitesse_x = (15 if pos[0] < 0 else -15)
         vitesse = (vitesse_x, vitesse_y)
 
     if not healthy:
@@ -85,6 +84,7 @@ def updateMouseHistory():
     mouse_history[1] = mouse_history[0]
     mouse_history[0] = pg.mouse.get_pos()
 
+
 def handleGrab():
     "Update food that are grabbed."
     mouse = pg.math.Vector2(pg.mouse.get_pos())
@@ -94,11 +94,13 @@ def handleGrab():
             food.grabbed = True
             food.vitesse *= 0
 
+
 def handleUngrab():
     for food in [f for f in FOOD_LIST if f.grabbed]:
         food.grabbed = False
         speed = pg.Vector2(mouse_history[0]) - pg.Vector2(mouse_history[1])
         food.vitesse = speed / MEM_MOUSE_EVENT_TIME * 30
+
 
 if __name__ == '__main__':
     pass
