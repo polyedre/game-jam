@@ -18,12 +18,15 @@ class Aliment(pg.sprite.Sprite):
     def __init__(self, _position, _vitesse, _healthy, _size):
 
         pg.sprite.Sprite.__init__(self)             # Superclass
+
         self.is_healthy = _healthy
+        img_name = ("./imgs/hamburger.png" if _healthy else "./imgs/salade.png")
+
         self.vitesse = pg.math.Vector2(_vitesse)
         self.acceleration = pg.math.Vector2(0, 0)
 
-        self.rect = pg.Rect(*_position, width = _size, height = _size)
-        self.image = pg.transform.scale(pg.image.load("./imgs/hamburger.png"), (50, 50))
+        self.rect = pg.Rect(*_position, _size, _size)
+        self.image = pg.transform.scale(pg.image.load(img_name), (50, 50))
 
 
     def update(self):
