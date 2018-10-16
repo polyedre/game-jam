@@ -10,8 +10,6 @@ pg.init()
 
 screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
-pg.display.flip()
-
 def main():
 
     CLOCK = pg.time.Clock()
