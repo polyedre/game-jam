@@ -15,6 +15,8 @@ pg.init()
 
 screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
+gui.init()
+
 def main():
 
     CLOCK = pg.time.Clock()
@@ -37,6 +39,8 @@ def main():
 
         for element in gui.GUI_LIST:
             element.draw(screen)
+            if element.percentage < 0.99:
+                element.percentage += 0.01
 
         # Update and draw bras
 
