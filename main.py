@@ -1,6 +1,8 @@
 import pygame as pg
 import aliments as al
 
+import gui
+
 GAME_NAME = "Eat and never run"
 
 SCREEN_WIDTH = 800
@@ -20,6 +22,8 @@ pg.init()
 
 screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 >>>>>>> aliments
+
+gui.init()
 
 def main():
 
@@ -61,6 +65,13 @@ def main():
         al.FOOD_LIST.draw(screen)
         al.FOOD_LIST.update()
         al.updateMouseHistory()
+
+        # GUI
+
+        for element in gui.GUI_LIST:
+            element.update()
+            element.draw(screen)
+
         # Update and draw bras
 
         pg.display.flip()
@@ -75,9 +86,11 @@ def main():
 
             if event.type == pg.MOUSEBUTTONDOWN:
                 al.handleGrab()
+                gui.handleGrab()
 
             if event.type == pg.MOUSEBUTTONUP:
                 al.handleUngrab()
+                gui.handleUngrab()
 
             if event.type == MEM_MOUSE_EVENT:
                 al.updateMouseHistory()
