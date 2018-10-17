@@ -29,7 +29,10 @@ class Aliment(pg.sprite.Sprite):
         self.acceleration = pg.math.Vector2(0, 0)
 
         self.rect = pg.Rect(*_position, _size, _size)
-        self.image = pg.transform.scale(pg.image.load(img_name), (50, 50))
+        self.image_visible = pg.transform.scale(pg.image.load(img_name), (50, 50))
+        self.image_invisible = pg.Surface((50, 50)).convert_alpha()
+        self.image_invisible.fill(pg.Color(100,100,100,0))
+        self.image = self.image_visible
 
         self.grabbed = False
 
@@ -93,6 +96,7 @@ def handleGrab():
         if (center - mouse).length() < GRAB_DISTANCE:
             food.grabbed = True
             food.vitesse *= 0
+            food.image = food.image_invisible
 
 
 def handleUngrab():
@@ -100,6 +104,7 @@ def handleUngrab():
         food.grabbed = False
         speed = pg.Vector2(mouse_history[0]) - pg.Vector2(mouse_history[1])
         food.vitesse = speed / MEM_MOUSE_EVENT_TIME * 30
+        food.image = food.image_visible
 
 
 if __name__ == '__main__':
