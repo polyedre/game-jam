@@ -1,18 +1,7 @@
 import pygame as pg
-
-
-GAME_NAME = "Eat and never run"
-
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-
-MEM_MOUSE_EVENT = pg.USEREVENT + 1
-MEM_MOUSE_EVENT_TIME = 100
-
-FRAMERATE = 30
-
 import aliments as al
 import gui
+from vars import *
 
 pg.init()
 
@@ -34,7 +23,7 @@ def main():
 
         screen.fill((255, 255, 255))
 
-        for element in gui.GUI_LIST_BACKGROUND:
+        for element in GUI_LIST_BACKGROUND:
             element.update()
             element.draw(screen)
 
@@ -44,7 +33,7 @@ def main():
 
         # GUI
 
-        for element in gui.GUI_LIST_FOREGROUND:
+        for element in GUI_LIST_FOREGROUND:
             element.update()
             element.draw(screen)
 

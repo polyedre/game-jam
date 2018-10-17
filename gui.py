@@ -1,9 +1,5 @@
 import pygame as pg
-
-from main import FRAMERATE, SCREEN_WIDTH, SCREEN_HEIGHT
-
-GUI_LIST_FOREGROUND = pg.sprite.Group()
-GUI_LIST_BACKGROUND = pg.sprite.Group()
+from vars import *
 
 class LoadingBar(pg.sprite.Sprite):
 
@@ -99,6 +95,7 @@ def init():
 
     background = Background("./imgs/background.png")
     GUI_LIST_BACKGROUND.add(background)
+
 
 def handleGrab():
     for elem in GUI_LIST_FOREGROUND:

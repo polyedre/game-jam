@@ -3,12 +3,8 @@
 
 import pygame as pg
 import random
+from vars import *
 
-from main import GAME_NAME, SCREEN_HEIGHT, SCREEN_WIDTH, MEM_MOUSE_EVENT_TIME
-
-FOOD_LIST = pg.sprite.Group()
-GRAVITY = pg.math.Vector2(0, 0.3)
-GRAB_DISTANCE = 50
 
 mouse_history = [(0, 0), (0, 0)]
 
