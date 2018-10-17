@@ -38,9 +38,8 @@ def main():
         # GUI
 
         for element in gui.GUI_LIST:
+            element.update()
             element.draw(screen)
-            if element.percentage < 0.99:
-                element.percentage += 0.01
 
         # Update and draw bras
 
@@ -56,9 +55,11 @@ def main():
 
             if event.type == pg.MOUSEBUTTONDOWN:
                 al.handleGrab()
+                gui.handleGrab()
 
             if event.type == pg.MOUSEBUTTONUP:
                 al.handleUngrab()
+                gui.handleUngrab()
 
             if event.type == MEM_MOUSE_EVENT:
                 al.updateMouseHistory()
