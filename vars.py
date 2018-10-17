@@ -6,6 +6,7 @@ GAME_NAME = "Eat and never run"
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 FRAMERATE = 30
+RUNNING = True
 
 
 # LISTS
@@ -19,8 +20,12 @@ FOOD_LIST = pg.sprite.Group()
 
 MEM_MOUSE_EVENT = pg.USEREVENT + 1
 MEM_MOUSE_EVENT_TIME = 100
+CLOCK = pg.time.Clock()
 
 
 # DYNAMIC
+
 GRAVITY = pg.math.Vector2(0, 0.3)
 GRAB_DISTANCE = 50
+SCROLL_TIME = 60 # seconds
+SCROLL_AVANCEMENT = 0

@@ -66,11 +66,12 @@ class Background(pg.sprite.Sprite):
         self.offset = 0
         self.image = pg.image.load(file_name)
 
-        self.interval = 3 * SCREEN_WIDTH / (60 * FRAMERATE)
+        self.interval = 3 * SCREEN_WIDTH / (SCROLL_TIME * FRAMERATE)
 
 
     def update(self):
         self.offset += self.interval
+        SCROLL_AVANCEMENT =  self.offset / (4 * SCREEN_WIDTH)
 
 
     def draw(self, screen):
@@ -107,6 +108,7 @@ def handleUngrab():
     for elem in GUI_LIST_FOREGROUND:
         if isinstance(elem, MouseHand):
             elem.mouse_open = True
+
 
 if __name__ == '__main__':
     pass

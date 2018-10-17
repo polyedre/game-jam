@@ -11,56 +11,60 @@ gui.init()
 
 def main():
 
-    CLOCK = pg.time.Clock()
-
     # Ajout des aliments
     pg.time.set_timer(pg.USEREVENT, 1000)
     pg.time.set_timer(MEM_MOUSE_EVENT, MEM_MOUSE_EVENT_TIME)
 
-    running = True
+    while RUNNING:
+        run()
 
-    while running:
+def run():
+    screen.fill((255, 255, 255))
 
-        screen.fill((255, 255, 255))
+    handleBackground()
+    handleForeground()
+    handleKeys()
 
-        for element in GUI_LIST_BACKGROUND:
-            element.update()
-            element.draw(screen)
+    pg.display.flip()
+    CLOCK.tick(FRAMERATE)
 
-        al.FOOD_LIST.draw(screen)
-        al.FOOD_LIST.update()
-        al.updateMouseHistory()
+def handleKeys():
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            pg.quit()
+            exit(0)
 
-        # GUI
+        if event.type == pg.USEREVENT:
+            al.create_new_aliment()
 
-        for element in GUI_LIST_FOREGROUND:
-            element.update()
-            element.draw(screen)
+        if event.type == pg.MOUSEBUTTONDOWN:
+            al.handleGrab()
+            gui.handleGrab()
 
-        # Update and draw bras
+        if event.type == pg.MOUSEBUTTONUP:
+            al.handleUngrab()
+            gui.handleUngrab()
 
-        pg.display.flip()
-        CLOCK.tick(FRAMERATE)
+        if event.type == MEM_MOUSE_EVENT:
+            al.updateMouseHistory()
 
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                running = False
 
-            if event.type == pg.USEREVENT:
-                al.create_new_aliment()
+def handleForeground():
+    # Food
+    al.FOOD_LIST.draw(screen)
+    al.FOOD_LIST.update()
+    al.updateMouseHistory()
 
-            if event.type == pg.MOUSEBUTTONDOWN:
-                al.handleGrab()
-                gui.handleGrab()
+    # GUI
+    for element in GUI_LIST_FOREGROUND:
+        element.update()
+        element.draw(screen)
 
-            if event.type == pg.MOUSEBUTTONUP:
-                al.handleUngrab()
-                gui.handleUngrab()
 
-            if event.type == MEM_MOUSE_EVENT:
-                al.updateMouseHistory()
-
-    pg.quit()
+def handleBackground():
+    for element in GUI_LIST_BACKGROUND:
+        element.update()
+        element.draw(screen)
 
 if __name__ == '__main__':
     main()
