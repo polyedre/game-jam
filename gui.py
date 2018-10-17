@@ -1,6 +1,9 @@
 import pygame as pg
 
-GUI_LIST = pg.sprite.Group()
+from main import FRAMERATE, SCREEN_WIDTH, SCREEN_HEIGHT
+
+GUI_LIST_FOREGROUND = pg.sprite.Group()
+GUI_LIST_BACKGROUND = pg.sprite.Group()
 
 class LoadingBar(pg.sprite.Sprite):
 
@@ -58,6 +61,26 @@ class MouseHand(pg.sprite.Sprite):
     def update(self):
         self.rect.center = pg.mouse.get_pos()
 
+
+class Background(pg.sprite.Sprite):
+
+    def __init__(self, file_name):
+        pg.sprite.Sprite.__init__(self)             # Superclass
+
+        self.offset = 0
+        self.image = pg.image.load(file_name)
+
+        self.interval = 3 * SCREEN_WIDTH / (60 * FRAMERATE)
+
+
+    def update(self):
+        self.offset += self.interval
+
+
+    def draw(self, screen):
+        screen.blit(self.image, [0,0, SCREEN_WIDTH, SCREEN_HEIGHT], area=[self.offset, 0, SCREEN_WIDTH, SCREEN_HEIGHT])
+
+
 def init():
     """
     Créé les éléments GUI du jeu :
@@ -66,21 +89,25 @@ def init():
      - La souris
     """
     health = LoadingBar(0.1, (255,0,0), [10, 10, 400, 20])
-    GUI_LIST.add(health)
+    GUI_LIST_FOREGROUND.add(health)
 
     health_deux = LoadingBar(0.5, (100,40,60), [10, 40, 400, 20])
-    GUI_LIST.add(health_deux)
+    GUI_LIST_FOREGROUND.add(health_deux)
 
     souris = MouseHand([0,0,40,40], "./imgs/mouse_open.png", "./imgs/mouse_close.png")
-    GUI_LIST.add(souris)
+    GUI_LIST_FOREGROUND.add(souris)
+
+    background = Background("./imgs/background.png")
+    GUI_LIST_BACKGROUND.add(background)
 
 def handleGrab():
-    for elem in GUI_LIST:
+    for elem in GUI_LIST_FOREGROUND:
         if isinstance(elem, MouseHand):
             elem.mouse_open = False
 
+
 def handleUngrab():
-    for elem in GUI_LIST:
+    for elem in GUI_LIST_FOREGROUND:
         if isinstance(elem, MouseHand):
             elem.mouse_open = True
 
