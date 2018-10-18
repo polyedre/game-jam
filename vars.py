@@ -13,7 +13,7 @@ FRAMERATE = 30
 GUI_LIST_FOREGROUND = pg.sprite.Group()
 GUI_LIST_BACKGROUND = pg.sprite.Group()
 FOOD_LIST = pg.sprite.Group()
-
+BODY_PARTS_LIST = pg.sprite.Group()
 
 # EVENTS
 

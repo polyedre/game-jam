@@ -1,5 +1,5 @@
 #+TITLE: GAME JAM #1
-#+AUTHOR: Chapal Victor, Henry Lucas, Floris
+#+AUTHOR: Chapal Victor, Henry Lucas, Choisy Floris
 
 * Description du jeu
 ** Synopsis

@@ -93,8 +93,8 @@ def init():
     souris = MouseHand([0,0,40,40], "./imgs/mouse_open.png", "./imgs/mouse_close.png")
     GUI_LIST_FOREGROUND.add(souris)
 
-    background = Background("./imgs/background.png")
-    GUI_LIST_BACKGROUND.add(background)
+    # background = Background("./imgs/background.png")
+    # GUI_LIST_BACKGROUND.add(background)
 
 
 def handleGrab():

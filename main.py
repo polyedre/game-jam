@@ -1,5 +1,6 @@
 import pygame as pg
 import aliments as al
+import hand as hd
 import gui
 from vars import *
 
@@ -18,6 +19,9 @@ def main():
     pg.time.set_timer(MEM_MOUSE_EVENT, MEM_MOUSE_EVENT_TIME)
 
     running = True
+
+    h = hd.Hand((100,100), 0)
+    FOOD_LIST.add(h)
 
     while running:
 
@@ -38,6 +42,7 @@ def main():
             element.draw(screen)
 
         # Update and draw bras
+        
 
         pg.display.flip()
         CLOCK.tick(FRAMERATE)
