@@ -26,7 +26,6 @@ class Hand(pg.sprite.Sprite):
             coeff = self.velocity / dist
         dx *= coeff
         dy *= coeff
-        print("dx", dx, "dy", dy)
         self.rect.move_ip(dx, dy) 
 
     def update(self):
