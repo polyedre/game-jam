@@ -12,7 +12,3 @@ class Hand(pg.sprite.Sprite):
 
     def update(self):
         pass
-
-    def draw(self):
-        pg.sprite.Sprite.draw()
-

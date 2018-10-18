@@ -20,8 +20,10 @@ def main():
 
     running = True
 
-    h = hd.Hand((100,100), 0)
-    FOOD_LIST.add(h)
+    left_hand = hd.Hand((100,100), 0)
+    BODY_PARTS_LIST.add(left_hand)
+    right_hand = hd.Hand((300,100), 0)
+    BODY_PARTS_LIST.add(right_hand)
 
     while running:
 
@@ -42,8 +44,9 @@ def main():
             element.draw(screen)
 
         # Update and draw bras
+        BODY_PARTS_LIST.update()
+        BODY_PARTS_LIST.draw(screen)
         
-
         pg.display.flip()
         CLOCK.tick(FRAMERATE)
 
