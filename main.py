@@ -20,11 +20,9 @@ def main():
 
     running = True
 
-    left_hand = hd.Hand((100,100), 0, 1)
+    left_hand = hd.Hand((200,200), 0, HAND_SPEED)
     BODY_PARTS_LIST.add(left_hand)
-    right_hand = hd.Hand((300,100), 0, 2)
-    right_hand.target = left_hand
-    right_hand.mode = hd.FOLLOWING
+    right_hand = hd.Hand((400,200), 0, HAND_SPEED)
     BODY_PARTS_LIST.add(right_hand)
 
     while running:

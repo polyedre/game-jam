@@ -25,12 +25,15 @@ class Aliment(pg.sprite.Sprite):
         self.acceleration = pg.math.Vector2(0, 0)
 
         self.rect = pg.Rect(*_position, _size, _size)
+        self.radius = _size/2
         self.image_visible = pg.transform.scale(pg.image.load(img_name), (50, 50))
         self.image_invisible = pg.Surface((50, 50)).convert_alpha()
         self.image_invisible.fill(pg.Color(100,100,100,0))
         self.image = self.image_visible
 
-        self.grabbed = False
+        self.grabbed = False # by the user
+        self.catched = False # by one of the computer's hands
+        #TODO: handle being catched and eaten by the computer
 
     def update(self):
         "Met à jour les positions et vitesses de l'objet"
