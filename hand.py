@@ -81,6 +81,16 @@ class Hand(pg.sprite.Sprite):
         dy *= coeff
         self.move_by(dx, dy)
 
+    def default_position(self):
+        if self.is_left:
+            def_x = self.head.rect.centerx - 50
+        else:
+            def_x = self.head.rect.centerx + 50
+        def_y = self.head.rect.centery + 150
+        ret = pg.sprite.Sprite()
+        ret.rect = pg.rect.Rect(def_x, def_y, 1, 1)
+        return ret            
+
     def update(self):
         if self.mode == FOLLOWING:
             if self.target.alive(): # condition to keep following this target
@@ -99,6 +109,8 @@ class Hand(pg.sprite.Sprite):
                 self.move_towards(self.head)
         else:
             self.choose_target()
-            if self.target != None:
+            if self.target == None:
+                self.move_towards(self.default_position())
+            else:
                 self.mode = FOLLOWING
 
