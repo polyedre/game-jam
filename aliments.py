@@ -32,8 +32,8 @@ class Aliment(pg.sprite.Sprite):
         self.image = self.image_visible
 
         self.grabbed = False # by the user
-        self.catched = False # by one of the computer's hands
-        #TODO: handle being catched and eaten by the computer
+        self.caught = False # by the computer
+        self.master = None
 
     def update(self):
         "Met à jour les positions et vitesses de l'objet"
@@ -41,6 +41,8 @@ class Aliment(pg.sprite.Sprite):
 
         if self.grabbed:
             self.rect.center = pg.mouse.get_pos()
+        elif self.caught:
+            self.rect = self.master.rect
         else:
             self.acceleration += GRAVITY
             self.vitesse += self.acceleration
@@ -92,7 +94,7 @@ def handleGrab():
     mouse = pg.math.Vector2(pg.mouse.get_pos())
     for food in FOOD_LIST:
         center = pg.math.Vector2(food.rect.center)
-        if (center - mouse).length() < GRAB_DISTANCE:
+        if not food.caught and (center - mouse).length() < GRAB_DISTANCE:
             food.grabbed = True
             food.vitesse *= 0
             food.image = food.image_invisible

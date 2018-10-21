@@ -20,6 +20,7 @@ class Hand(pg.sprite.Sprite):
         self.is_left = _is_left
         self.mode = HUNTING
         self.target = None
+        self.set_boundaries()
 
     def distance(self, sprite):
         return sqrt(sprite.rect.centerx**2 + sprite.rect.centery**2) 
@@ -31,7 +32,7 @@ class Hand(pg.sprite.Sprite):
         min_food = None
         min_dist = None
         for food in FOOD_LIST:
-            if food.is_healthy:
+            if food.is_healthy and not food.grabbed and not food.caught:
                 new_dist = self.distance(food)
                 if min_dist == None or new_dist < min_dist:
                     min_dist = new_dist
@@ -53,7 +54,6 @@ class Hand(pg.sprite.Sprite):
         new_y = self.rect.centery + dy
         new_dx = dx
         new_dy = dy
-        self.set_boundaries()
         # Correct if wants to go too far
         if new_x < self.left_boundary:
             new_dx = self.left_boundary - self.rect.centerx
@@ -96,7 +96,8 @@ class Hand(pg.sprite.Sprite):
             if self.target.alive(): # condition to keep following this target
                 # TODO: stop following if target gets out of hunting zone
                 if pg.sprite.collide_circle(self, self.target):
-                    FOOD_LIST.remove(self.target) #TODO : replace by eating
+                    self.target.caught = True
+                    self.target.master = self
                     self.mode = EATING
                 else:
                     self.move_towards(self.target)
@@ -104,6 +105,8 @@ class Hand(pg.sprite.Sprite):
                 self.mode = HUNTING
         elif self.mode == EATING:
             if pg.sprite.collide_circle(self, self.head):
+                FOOD_LIST.remove(self.target)
+                self.target = None
                 self.mode = HUNTING
             else:
                 self.move_towards(self.head)

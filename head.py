@@ -9,3 +9,7 @@ class Head(pg.sprite.Sprite):
         self.radius = _radius
 
         self.image = pg.transform.scale(pg.image.load("./imgs/circle.png"), (_size, _size))
+
+    # def update(self):
+    #     if pg.sprite.spritecollide():
+    #         print("Miam !")
