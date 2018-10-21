@@ -67,7 +67,7 @@ class Background(pg.sprite.Sprite):
 
 def init():
     """
-    Créé les éléments GUI du jeu :
+    Crée les éléments GUI du jeu :
      - Une barre de vie
      - Une barre d'appétence
      - La souris
@@ -80,7 +80,6 @@ def init():
               "./imgs/mouse_open.png", "./imgs/mouse_close.png").add(GUI_LIST_FOREGROUND)
 
     Background("./imgs/background.png").add(GUI_LIST_BACKGROUND)
-
 
 def handleGrab():
     for elem in GUI_LIST_FOREGROUND:

@@ -13,11 +13,20 @@ class Hand(pg.sprite.Sprite):
         self.velocity = _velocity
         self.rect = pg.Rect(*_position, _size, _size)
         self.radius = HAND_RADIUS
+        self.is_left = _is_left
 
-        self.image = pg.transform.scale(pg.image.load("./imgs/circle.png").convert_alpha(), (50, 50))
+        if self.is_left:
+            self.path_open = "./imgs/left_hand_open.png"
+            self.path_closed = "./imgs/left_hand_closed.png"
+        else:
+            self.path_open = "./imgs/right_hand_open.png"
+            self.path_closed = "./imgs/right_hand_closed.png"
+
+        self.image_open = pg.transform.scale(pg.image.load(self.path_open), (_size, _size))
+        self.image_closed = pg.transform.scale(pg.image.load(self.path_closed), (_size, _size))
+        self.image = self.image_open
 
         self.head = _head
-        self.is_left = _is_left
         self.mode = HUNTING
         self.target = None
         self.set_boundaries()
@@ -40,14 +49,25 @@ class Hand(pg.sprite.Sprite):
         self.target = min_food
 
     def set_boundaries(self):
-        self.top_boundary = self.head.rect.centery - 100
+        self.top_boundary = self.head.rect.centery - 250
         self.bottom_boundary = self.head.rect.centery + 100
         if self.is_left:
             self.right_boundary = self.head.rect.centerx
-            self.left_boundary = self.right_boundary - 100
+            self.left_boundary = self.right_boundary - 150
         else:
             self.left_boundary = self.head.rect.centerx
-            self.right_boundary = self.left_boundary + 100
+            self.right_boundary = self.left_boundary + 150
+
+    def default_position(self):
+        if self.is_left:
+            def_x = self.head.rect.centerx - SCREEN_WIDTH//8
+        else:
+            def_x = self.head.rect.centerx + SCREEN_WIDTH//8
+        def_y = self.head.rect.centery + 10
+        ret = pg.sprite.Sprite()
+        ret.rect = pg.rect.Rect(def_x, def_y, 1, 1)
+        ret.rect.center = (def_x, def_y)
+        return ret
 
     def move_by(self, dx, dy):
         new_x = self.rect.centerx + dx
@@ -104,7 +124,6 @@ class Hand(pg.sprite.Sprite):
                 self.mode = HUNTING
         elif self.mode == EATING:
             if pg.sprite.collide_circle(self, self.head):
-                FOOD_LIST.remove(self.target)
                 self.target = None
                 self.mode = HUNTING
             else:
