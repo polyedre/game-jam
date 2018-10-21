@@ -1,4 +1,8 @@
 import pygame as pg
+
+pg.init()
+pg.font.init()
+
 import aliments as al
 import hand as ha
 import head as he
@@ -7,28 +11,18 @@ import level
 from vars import *
 
 
-def main():
 
-    pg.init()
-    pg.font.init()
-
-def main():
-
-    screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
-
-    gui.init()
-    pages = level.init(screen)
-
-    pages['accueil'].run()
 
 def play(screen):
 
-    head = he.Head((300, 100), HEAD_SIZE, HEAD_RADIUS)
-    BODY_PARTS_LIST.add(head)
-    left_hand = ha.Hand((200,200), 0, HAND_SPEED, HAND_SIZE, head, True)
-    BODY_PARTS_LIST.add(left_hand)
-    right_hand = ha.Hand((400,200), 0, HAND_SPEED, HAND_SIZE, head, False)
-    BODY_PARTS_LIST.add(right_hand)
+    pages['accueil'].running = False
+    gui.init()
+
+    head = he.Head((SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), HEAD_SIZE, HEAD_RADIUS)
+    head.add(BODY_PARTS_LIST)
+    ha.Hand((SCREEN_WIDTH // 4, 3 * SCREEN_HEIGHT // 4), 0, HAND_SPEED, HAND_SIZE, head, True).add(BODY_PARTS_LIST)
+    ha.Hand((400,200), 0, HAND_SPEED, HAND_SIZE, head, False).add(BODY_PARTS_LIST)
+
     pg.time.set_timer(pg.USEREVENT, 1000)
     pg.time.set_timer(MEM_MOUSE_EVENT, MEM_MOUSE_EVENT_TIME)
 
@@ -42,10 +36,6 @@ def run(screen):
     handleBackground(screen)
     handleForeground(screen)
     handleKeys(pg.event.get())
-
-    # Update and draw bras
-    BODY_PARTS_LIST.draw(screen)
-    BODY_PARTS_LIST.update()
 
     pg.display.flip()
     CLOCK.tick(FRAMERATE)
@@ -79,21 +69,31 @@ def handleForeground(screen):
     al.FOOD_LIST.update()
     al.updateMouseHistory()
 
+    # Update and draw bras
+    BODY_PARTS_LIST.update()
+    BODY_PARTS_LIST.draw(screen)
+
     # GUI
-    for element in GUI_LIST_FOREGROUND:
-        element.update()
-        element.draw(screen)
+    GUI_LIST_FOREGROUND.update()
+    GUI_LIST_FOREGROUND.draw(screen)
 
 
 def handleBackground(screen):
     ""
-    for element in GUI_LIST_BACKGROUND:
-        element.update()
-        element.draw(screen)
+    GUI_LIST_BACKGROUND.update()
+    GUI_LIST_BACKGROUND.draw(screen)
 
 def finished_run_animation():
     print("Vous avez gagné ou perdu on sait par encore")
-    print("On est sensé passé au niveau suivant")
+    print("On est sensé passer au niveau suivant")
 
 if __name__ == '__main__':
-    main()
+    screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+
+    pages = level.init(screen)
+    level.Button([SCREEN_WIDTH // 4,
+            SCREEN_HEIGHT // 2,
+            SCREEN_WIDTH // 2,
+            SCREEN_HEIGHT // 8 - 10], play, [screen],
+           text="Jouer").add(pages["accueil"].sprite_list)
+    pages['accueil'].run()

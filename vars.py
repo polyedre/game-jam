@@ -1,45 +1,39 @@
 import pygame as pg
 
-# TEMPORAIRE / A SUPPRIMER
-pg.font.init()
-
 # WINDOW
-
 GAME_NAME = "Eat and never run"
 SCREEN_WIDTH = 1920 // 2
 SCREEN_HEIGHT = 1080 // 2
-FRAMERATE = 60
+FRAMERATE = 30
 RUNNING = True
 FONT = pg.font.Font(None, 40)
 
 # LISTS
-
 GUI_LIST_FOREGROUND = pg.sprite.Group()
 GUI_LIST_BACKGROUND = pg.sprite.Group()
 FOOD_LIST = pg.sprite.Group()
 BODY_PARTS_LIST = pg.sprite.Group()
 
 # EVENTS
-
 MEM_MOUSE_EVENT = pg.USEREVENT + 1
 MEM_MOUSE_EVENT_TIME = 100
 FINISHED_RUN = pg.USEREVENT + 2
 CLOCK = pg.time.Clock()
 
-
 # DYNAMIC
-
 GRAVITY = pg.math.Vector2(0, 0.3)
 GRAB_DISTANCE = 50
 SCROLL_TIME = 60 # seconds
 SCROLL_AVANCEMENT = 0
 HAND_SPEED = 10
+SCORE = 0
 
 # GEOMETRICAL
 HEAD_SIZE = 60
 HEAD_RADIUS = 10
 HAND_SIZE = 30
 HAND_RADIUS = 10
+
 #ARM_LENGTH = 80
 FOOD_SIZE = 50
 FOOD_RADIUS = 10

@@ -13,8 +13,8 @@ class Hand(pg.sprite.Sprite):
         self.velocity = _velocity
         self.rect = pg.Rect(*_position, _size, _size)
         self.radius = HAND_RADIUS
-        
-        self.image = pg.transform.scale(pg.image.load("./imgs/circle.png"), (50, 50))
+
+        self.image = pg.transform.scale(pg.image.load("./imgs/circle.png").convert_alpha(), (50, 50))
 
         self.head = _head
         self.is_left = _is_left
@@ -23,8 +23,8 @@ class Hand(pg.sprite.Sprite):
         self.set_boundaries()
 
     def distance(self, sprite):
-        return sqrt(sprite.rect.centerx**2 + sprite.rect.centery**2) 
-        
+        return sqrt(sprite.rect.centerx**2 + sprite.rect.centery**2)
+
     def choose_target(self):
         """
         Finds closest healthy food and sets it as target
@@ -48,7 +48,7 @@ class Hand(pg.sprite.Sprite):
         else:
             self.left_boundary = self.head.rect.centerx
             self.right_boundary = self.left_boundary + 100
-        
+
     def move_by(self, dx, dy):
         new_x = self.rect.centerx + dx
         new_y = self.rect.centery + dy
@@ -89,7 +89,7 @@ class Hand(pg.sprite.Sprite):
         def_y = self.head.rect.centery + 150
         ret = pg.sprite.Sprite()
         ret.rect = pg.rect.Rect(def_x, def_y, 1, 1)
-        return ret            
+        return ret
 
     def update(self):
         if self.mode == FOLLOWING:
@@ -115,4 +115,3 @@ class Hand(pg.sprite.Sprite):
                 self.move_towards(self.default_position())
             else:
                 self.mode = FOLLOWING
-

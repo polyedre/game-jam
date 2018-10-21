@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import pygame as pg
 from vars import *
-from main import play
+
 """
 This file handle the process of a whole level.
 It handle how hard it is, the differents animations, etc.
@@ -123,11 +123,6 @@ def init(screen):
     accueil = Page(screen, pg.sprite.Group(), CLOCK, (255,255,255))
     tuto = Page(screen, pg.sprite.Group(), CLOCK)
 
-    Button([SCREEN_WIDTH // 4,
-            SCREEN_HEIGHT // 2,
-            SCREEN_WIDTH // 2,
-            SCREEN_HEIGHT // 8 - 10], play, [screen],
-           text="Jouer").add(accueil.sprite_list)
 
     Button([SCREEN_WIDTH // 4, 5 * SCREEN_HEIGHT // 8,
             SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8 - 10],
