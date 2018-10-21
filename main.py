@@ -27,9 +27,8 @@ def run():
 
     pg.display.flip()
     CLOCK.tick(FRAMERATE)
-
-def handleKeys():
-    for event in pg.event.get():
+def handleKeys(event_list):
+    for event in event_list:
         if event.type == pg.QUIT:
             pg.quit()
             exit(0)
