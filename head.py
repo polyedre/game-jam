@@ -8,8 +8,8 @@ class Head(pg.sprite.Sprite):
 
         self.rect = pg.Rect(*_position, _size, _size)
         self.radius = _radius
-
-        self.image = pg.transform.scale(pg.image.load("./imgs/circle.png"), (_size, _size))
+        #        self.image = pg.transform.scale(pg.image.load("./imgs/circle.png"), (50, 50))
+        self.image = pg.image.load("./imgs/body_slim_mouth_open.png")
 
     def update(self):
         list = pg.sprite.spritecollide(self, FOOD_LIST, False, pg.sprite.collide_circle)

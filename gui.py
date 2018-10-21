@@ -25,7 +25,6 @@ class LoadingBar(pg.sprite.Sprite):
 
 
     def update(self):
-
         if self.percentage < 0.99:
             self.percentage += 0.01
 
@@ -79,7 +78,7 @@ class Background(pg.sprite.Sprite):
 
 def init():
     """
-    Créé les éléments GUI du jeu :
+    Crée les éléments GUI du jeu :
      - Une barre de vie
      - Une barre d'appétence
      - La souris
@@ -90,11 +89,11 @@ def init():
     health_deux = LoadingBar(0.5, (100,40,60), [10, 40, 400, 20])
     GUI_LIST_FOREGROUND.add(health_deux)
 
-    souris = MouseHand([0,0,40,40], "./imgs/mouse_open.png", "./imgs/mouse_close.png")
+    souris = MouseHand([20, 20, 60, 60], "./imgs/mouse_hand_open.png", "./imgs/mouse_hand_closed.png")
     GUI_LIST_FOREGROUND.add(souris)
 
-    # background = Background("./imgs/background.png")
-    # GUI_LIST_BACKGROUND.add(background)
+    background = Background("./imgs/background.png")
+    GUI_LIST_BACKGROUND.add(background)
 
 
 def handleGrab():

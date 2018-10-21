@@ -13,11 +13,20 @@ class Hand(pg.sprite.Sprite):
         self.velocity = _velocity
         self.rect = pg.Rect(*_position, _size, _size)
         self.radius = HAND_RADIUS
-        
-        self.image = pg.transform.scale(pg.image.load("./imgs/circle.png"), (50, 50))
-
-        self.head = _head
         self.is_left = _is_left
+
+        if self.is_left:
+            self.path_open = "./imgs/left_hand_open.png"
+            self.path_closed = "./imgs/left_hand_closed.png"
+        else:
+            self.path_open = "./imgs/right_hand_open.png"
+            self.path_closed = "./imgs/right_hand_closed.png"
+        
+        self.image_open = pg.transform.scale(pg.image.load(self.path_open), (_size, _size))
+        self.image_closed = pg.transform.scale(pg.image.load(self.path_closed), (_size, _size))
+        self.image = self.image_open
+        
+        self.head = _head
         self.mode = HUNTING
         self.target = None
         self.set_boundaries()
