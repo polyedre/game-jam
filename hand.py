@@ -93,7 +93,7 @@ class Hand(pg.sprite.Sprite):
 
     def update(self):
         if self.mode == FOLLOWING:
-            if self.target.alive() and self.distance(target) < APPETITE: # condition to keep following this target
+            if self.target.alive(): # condition to keep following this target
                 if pg.sprite.collide_circle(self, self.target):
                     self.target.caught = True
                     self.target.master = self
