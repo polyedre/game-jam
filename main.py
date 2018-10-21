@@ -34,11 +34,9 @@ def run():
     handleForeground()
     handleKeys()
 
-    pg.display.flip()
-    CLOCK.tick(FRAMERATE)
     # Update and draw bras
-    BODY_PARTS_LIST.update()
     BODY_PARTS_LIST.draw(screen)
+    BODY_PARTS_LIST.update()
     
     pg.display.flip()
     CLOCK.tick(FRAMERATE)
