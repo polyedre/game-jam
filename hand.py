@@ -6,15 +6,17 @@ HUNTING, FOLLOWING, EATING = 1, 2, 3
 
 class Hand(pg.sprite.Sprite):
 
-    def __init__(self, _position, _area, _velocity):
+    def __init__(self, _position, _area, _velocity, _head):
         pg.sprite.Sprite.__init__(self)
 
-        self.position = _position
         self.area = _area
         self.velocity = _velocity
-        self.image = pg.transform.scale(pg.image.load("./imgs/circle.png"), (50, 50))
         self.rect = pg.Rect(*_position, 50, 50)
         self.radius = 25
+        
+        self.image = pg.transform.scale(pg.image.load("./imgs/circle.png"), (50, 50))
+
+        self.head = _head
         self.mode = HUNTING
         self.target = None
 
@@ -62,6 +64,7 @@ class Hand(pg.sprite.Sprite):
                 self.mode = HUNTING
         elif self.mode == EATING:
             pass
+#            self.move_towards(self.head)
         else:
             self.choose_target()
             if self.target != None:

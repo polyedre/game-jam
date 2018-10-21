@@ -1,6 +1,7 @@
 import pygame as pg
 import aliments as al
-import hand as hd
+import hand as ha
+import head as he
 import gui
 from vars import *
 
@@ -20,9 +21,11 @@ def main():
 
     running = True
 
-    left_hand = hd.Hand((200,200), 0, HAND_SPEED)
+    head = he.Head((300, 100), HEAD_SIZE, HEAD_RADIUS)
+    BODY_PARTS_LIST.add(head)
+    left_hand = ha.Hand((200,200), 0, HAND_SPEED, head)
     BODY_PARTS_LIST.add(left_hand)
-    right_hand = hd.Hand((400,200), 0, HAND_SPEED)
+    right_hand = ha.Hand((400,200), 0, HAND_SPEED, head)
     BODY_PARTS_LIST.add(right_hand)
 
     while running:
