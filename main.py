@@ -23,9 +23,9 @@ def main():
 
     head = he.Head((300, 100), HEAD_SIZE, HEAD_RADIUS)
     BODY_PARTS_LIST.add(head)
-    left_hand = ha.Hand((200,200), 0, HAND_SPEED, head)
+    left_hand = ha.Hand((200,200), 0, HAND_SPEED, HAND_SIZE, head, True)
     BODY_PARTS_LIST.add(left_hand)
-    right_hand = ha.Hand((400,200), 0, HAND_SPEED, head)
+    right_hand = ha.Hand((400,200), 0, HAND_SPEED, HAND_SIZE, head, False)
     BODY_PARTS_LIST.add(right_hand)
 
     while running:

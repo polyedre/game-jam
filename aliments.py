@@ -19,13 +19,13 @@ class Aliment(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)             # Superclass
 
         self.is_healthy = _healthy
-        img_name = ("./imgs/salade.png" if _healthy else "./imgs/hamburger.png")
+        img_name = ("./imgs/green-circle.png" if _healthy else "./imgs/orange-circle.png")
 
         self.vitesse = pg.math.Vector2(_vitesse)
         self.acceleration = pg.math.Vector2(0, 0)
 
         self.rect = pg.Rect(*_position, _size, _size)
-        self.radius = _size/2
+        self.radius = FOOD_RADIUS
         self.image_visible = pg.transform.scale(pg.image.load(img_name), (50, 50))
         self.image_invisible = pg.Surface((50, 50)).convert_alpha()
         self.image_invisible.fill(pg.Color(100,100,100,0))
