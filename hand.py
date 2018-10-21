@@ -1,3 +1,4 @@
+
 import pygame as pg
 from math import hypot, sqrt
 from vars import *
@@ -49,15 +50,26 @@ class Hand(pg.sprite.Sprite):
         self.target = min_food
 
     def set_boundaries(self):
-        self.top_boundary = self.head.rect.centery - 100
+        self.top_boundary = self.head.rect.centery - 250
         self.bottom_boundary = self.head.rect.centery + 100
         if self.is_left:
             self.right_boundary = self.head.rect.centerx
-            self.left_boundary = self.right_boundary - 100
+            self.left_boundary = self.right_boundary - 150
         else:
             self.left_boundary = self.head.rect.centerx
-            self.right_boundary = self.left_boundary + 100
-        
+            self.right_boundary = self.left_boundary + 150
+
+    def default_position(self):
+        if self.is_left:
+            def_x = self.head.rect.centerx - SCREEN_WIDTH//8
+        else:
+            def_x = self.head.rect.centerx + SCREEN_WIDTH//8
+        def_y = self.head.rect.centery + 10
+        ret = pg.sprite.Sprite()
+        ret.rect = pg.rect.Rect(def_x, def_y, 1, 1)
+        ret.rect.center = (def_x, def_y)
+        return ret 
+            
     def move_by(self, dx, dy):
         new_x = self.rect.centerx + dx
         new_y = self.rect.centery + dy
@@ -90,16 +102,6 @@ class Hand(pg.sprite.Sprite):
         dy *= coeff
         self.move_by(dx, dy)
 
-    def default_position(self):
-        if self.is_left:
-            def_x = self.head.rect.centerx - 50
-        else:
-            def_x = self.head.rect.centerx + 50
-        def_y = self.head.rect.centery + 150
-        ret = pg.sprite.Sprite()
-        ret.rect = pg.rect.Rect(def_x, def_y, 1, 1)
-        return ret            
-
     def update(self):
         if self.mode == FOLLOWING:
             if self.target.alive(): # condition to keep following this target
@@ -113,7 +115,6 @@ class Hand(pg.sprite.Sprite):
                 self.mode = HUNTING
         elif self.mode == EATING:
             if pg.sprite.collide_circle(self, self.head):
-                FOOD_LIST.remove(self.target)
                 self.target = None
                 self.mode = HUNTING
             else:
