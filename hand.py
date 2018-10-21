@@ -30,19 +30,19 @@ class Hand(pg.sprite.Sprite):
         min_food = None
         min_dist = None
         for food in FOOD_LIST:
-            if not food.is_healthy:
+            if food.is_healthy:
                 new_dist = self.distance(food)
                 if min_dist == None or new_dist < min_dist:
                     min_dist = new_dist
                     min_food = food
         self.target = min_food
         
-    def move_towards_target(self):
+    def move_towards(self, sprite):
         """
         Move towards self.target using self.velocity
         """
-        dx = self.target.rect.x - self.rect.x
-        dy = self.target.rect.y - self.rect.y
+        dx = sprite.rect.x - self.rect.x
+        dy = sprite.rect.y - self.rect.y
         dist = hypot(dx, dy)
         if dist == 0:
             coeff = 0
@@ -59,12 +59,11 @@ class Hand(pg.sprite.Sprite):
                 if pg.sprite.collide_circle(self, self.target):
                     FOOD_LIST.remove(self.target) #TODO : replace by eating
                 else:
-                    self.move_towards_target()
+                    self.move_towards(self.target)
             else:
                 self.mode = HUNTING
         elif self.mode == EATING:
-            pass
-#            self.move_towards(self.head)
+            self.move_towards(self.head)
         else:
             self.choose_target()
             if self.target != None:

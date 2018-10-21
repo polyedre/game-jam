@@ -19,7 +19,7 @@ class Aliment(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)             # Superclass
 
         self.is_healthy = _healthy
-        img_name = ("./imgs/hamburger.png" if _healthy else "./imgs/salade.png")
+        img_name = ("./imgs/salade.png" if _healthy else "./imgs/hamburger.png")
 
         self.vitesse = pg.math.Vector2(_vitesse)
         self.acceleration = pg.math.Vector2(0, 0)
