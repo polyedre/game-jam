@@ -19,18 +19,21 @@ class Aliment(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)             # Superclass
 
         self.is_healthy = _healthy
-        img_name = ("./imgs/hamburger.png" if _healthy else "./imgs/salade.png")
+        img_name = ("./imgs/green-circle.png" if _healthy else "./imgs/orange-circle.png")
 
         self.vitesse = pg.math.Vector2(_vitesse)
         self.acceleration = pg.math.Vector2(0, 0)
 
         self.rect = pg.Rect(*_position, _size, _size)
+        self.radius = FOOD_RADIUS
         self.image_visible = pg.transform.scale(pg.image.load(img_name), (50, 50))
         self.image_invisible = pg.Surface((50, 50)).convert_alpha()
         self.image_invisible.fill(pg.Color(100,100,100,0))
         self.image = self.image_visible
 
-        self.grabbed = False
+        self.grabbed = False # by the user
+        self.caught = False # by the computer
+        self.master = None
 
     def update(self):
         "Met à jour les positions et vitesses de l'objet"
@@ -38,6 +41,8 @@ class Aliment(pg.sprite.Sprite):
 
         if self.grabbed:
             self.rect.center = pg.mouse.get_pos()
+        elif self.caught:
+            self.rect = self.master.rect
         else:
             self.acceleration += GRAVITY
             self.vitesse += self.acceleration
@@ -49,7 +54,10 @@ class Aliment(pg.sprite.Sprite):
         if self.rect.x < -100 or self.rect.x > SCREEN_WIDTH + 100\
            or self.rect.y > SCREEN_HEIGHT + 100:
             FOOD_LIST.remove(self)
-
+    
+    def be_eaten(self):
+        print("Je meurs ! J'étais healthy :", self.is_healthy)
+        FOOD_LIST.remove(self)
 
 def create_new_aliment(pos=None, vitesse=None,
                        healthy=None, size=None):
@@ -89,7 +97,7 @@ def handleGrab():
     mouse = pg.math.Vector2(pg.mouse.get_pos())
     for food in FOOD_LIST:
         center = pg.math.Vector2(food.rect.center)
-        if (center - mouse).length() < GRAB_DISTANCE:
+        if not food.caught and (center - mouse).length() < GRAB_DISTANCE:
             food.grabbed = True
             food.vitesse *= 0
             food.image = food.image_invisible
