@@ -54,7 +54,10 @@ class Aliment(pg.sprite.Sprite):
         if self.rect.x < -100 or self.rect.x > SCREEN_WIDTH + 100\
            or self.rect.y > SCREEN_HEIGHT + 100:
             FOOD_LIST.remove(self)
-
+    
+    def be_eaten(self):
+        print("Je meurs ! J'étais healthy :", self.is_healthy)
+        FOOD_LIST.remove(self)
 
 def create_new_aliment(pos=None, vitesse=None,
                        healthy=None, size=None):

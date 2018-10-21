@@ -1,4 +1,5 @@
 import pygame as pg
+from vars import *
 
 class Head(pg.sprite.Sprite):
 
@@ -10,6 +11,13 @@ class Head(pg.sprite.Sprite):
 
         self.image = pg.transform.scale(pg.image.load("./imgs/circle.png"), (_size, _size))
 
-    # def update(self):
-    #     if pg.sprite.spritecollide():
-    #         print("Miam !")
+    def update(self):
+        list = pg.sprite.spritecollide(self, FOOD_LIST, False, pg.sprite.collide_circle)
+        if list != []:
+            for food in list:
+                if food.grabbed or food.caught:
+                    food.be_eaten()
+                    self.eat()
+
+    def eat(self):
+        print("Miam !")
