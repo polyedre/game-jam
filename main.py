@@ -48,6 +48,9 @@ def handleKeys():
         if event.type == MEM_MOUSE_EVENT:
             al.updateMouseHistory()
 
+        if event.type == FINISHED_RUN:
+            finished_run_animation()
+
 
 def handleForeground():
     # Food
@@ -62,9 +65,13 @@ def handleForeground():
 
 
 def handleBackground():
+    ""
     for element in GUI_LIST_BACKGROUND:
         element.update()
         element.draw(screen)
 
+def finished_run_animation():
+    print("Vous avez gagné ou perdu on sait par encore")
+    print("On est sensé passé au niveau suivant")
 if __name__ == '__main__':
     main()

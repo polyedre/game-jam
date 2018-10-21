@@ -65,13 +65,14 @@ class Background(pg.sprite.Sprite):
 
         self.offset = 0
         self.image = pg.image.load(file_name)
+        self.image = pg.transform.scale(self.image, (SCREEN_WIDTH * 3, SCREEN_HEIGHT))
 
         self.interval = 3 * SCREEN_WIDTH / (SCROLL_TIME * FRAMERATE)
 
 
     def update(self):
         self.offset += self.interval
-        SCROLL_AVANCEMENT =  self.offset / (4 * SCREEN_WIDTH)
+        SCROLL_AVANCEMENT =  self.offset / (3 * SCREEN_WIDTH)
 
 
     def draw(self, screen):
