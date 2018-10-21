@@ -1,5 +1,7 @@
 import pygame as pg
 import aliments as al
+import hand as ha
+import head as he
 import gui
 from vars import *
 
@@ -10,6 +12,12 @@ screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 gui.init()
 
 def main():
+    head = he.Head((300, 100), HEAD_SIZE, HEAD_RADIUS)
+    BODY_PARTS_LIST.add(head)
+    left_hand = ha.Hand((200,200), 0, HAND_SPEED, HAND_SIZE, head, True)
+    BODY_PARTS_LIST.add(left_hand)
+    right_hand = ha.Hand((400,200), 0, HAND_SPEED, HAND_SIZE, head, False)
+    BODY_PARTS_LIST.add(right_hand)
 
     # Ajout des aliments
     pg.time.set_timer(pg.USEREVENT, 1000)
@@ -18,6 +26,7 @@ def main():
     while RUNNING:
         run()
 
+
 def run():
     screen.fill((255, 255, 255))
 
@@ -25,6 +34,12 @@ def run():
     handleForeground()
     handleKeys()
 
+    pg.display.flip()
+    CLOCK.tick(FRAMERATE)
+    # Update and draw bras
+    BODY_PARTS_LIST.update()
+    BODY_PARTS_LIST.draw(screen)
+    
     pg.display.flip()
     CLOCK.tick(FRAMERATE)
 
@@ -47,10 +62,9 @@ def handleKeys():
 
         if event.type == MEM_MOUSE_EVENT:
             al.updateMouseHistory()
-
+            
         if event.type == FINISHED_RUN:
             finished_run_animation()
-
 
 def handleForeground():
     # Food
