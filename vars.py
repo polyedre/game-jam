@@ -1,5 +1,8 @@
 import pygame as pg
 
+# TEMPORAIRE / A SUPPRIMER
+pg.font.init()
+
 # WINDOW
 
 GAME_NAME = "Eat and never run"
@@ -7,7 +10,7 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 FRAMERATE = 30
 RUNNING = True
-
+FONT = pg.font.Font(None, 40)
 
 # LISTS
 

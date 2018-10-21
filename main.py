@@ -1,17 +1,24 @@
 import pygame as pg
 import aliments as al
 import gui
+import level
 from vars import *
 
-pg.init()
-
-screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
-
-gui.init()
 
 def main():
 
-    # Ajout des aliments
+    pg.init()
+    pg.font.init()
+
+    screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+
+    gui.init()
+    pages = level.init()
+
+    pages['accueil'].run()
+
+def play():
+
     pg.time.set_timer(pg.USEREVENT, 1000)
     pg.time.set_timer(MEM_MOUSE_EVENT, MEM_MOUSE_EVENT_TIME)
 
@@ -23,10 +30,11 @@ def run():
 
     handleBackground()
     handleForeground()
-    handleKeys()
+    handleKeys(pg.event.get())
 
     pg.display.flip()
     CLOCK.tick(FRAMERATE)
+
 def handleKeys(event_list):
     for event in event_list:
         if event.type == pg.QUIT:
@@ -46,7 +54,6 @@ def handleKeys(event_list):
 
         if event.type == MEM_MOUSE_EVENT:
             al.updateMouseHistory()
-
 
 def handleForeground():
     # Food

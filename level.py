@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import pygame as pg
 from vars import *
+from main import play
 """
 This file handle the process of a whole level.
 It handle how hard it is, the differents animations, etc.
@@ -10,7 +11,7 @@ It handle how hard it is, the differents animations, etc.
 class Button(pg.sprite.Sprite):
 
     def __init__(self, rect, action, args, text=None, image=None):
-        "docstring du module init"
+        "Docstring du module init"
 
         pg.sprite.Sprite.__init__(self)             # Superclass
 
@@ -25,15 +26,40 @@ class Button(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.move_ip(rect.x, rect.y)
 
+        self.text_surface = FONT.render(text, True, (0,0,0))
+        self.text_surface_rect = self.text_surface.get_rect()
+        self.text_surface_rect.center = (self.rect.width // 2,
+                                    self.rect.height // 2)
+
+        self.image.blit(self.text_surface, (10,10))
+
         self.action = action
         self.args = args
 
     def update(self):
-
         if self.rect.collidepoint(pg.mouse.get_pos()):
             self.image.fill(pg.Color(100,150,100))
         else:
             self.image.fill(pg.Color(110,159,200))
+        self.image.blit(self.text_surface, self.text_surface_rect)
+
+
+class Text(pg.sprite.Sprite):
+
+    def __init__(self, text, pos, font=None, color=(255,255,255), centered=True):
+        "Docstring du module init"
+
+        pg.sprite.Sprite.__init__(self)             # Superclass
+
+        if not font:
+            self.font = FONT
+
+        self.image = FONT.render(text, True, color, (20,20,20))
+        self.rect = self.image.get_rect()
+        if centered:
+            self.rect.center = pos
+        else:
+            self.rect.move_ip(*pos)
 
 
 class Page():
@@ -52,8 +78,8 @@ class Page():
 
         while running:
 
-            self.draw()
             self.update()
+            self.draw()
             self.keys()
 
             CLOCK.tick(FRAMERATE)
@@ -78,17 +104,21 @@ class Page():
             if event.type == pg.MOUSEBUTTONDOWN:
                 for b in (b for b in self.sprite_list if isinstance(b, Button)):
                     if b.rect.collidepoint(pg.mouse.get_pos()):
-                        b.action(*b.args)
+                        if b.args:
+                            b.action(*b.args)
+                        else:
+                            b.action()
+
 
 def switch_page(current, new):
     "Éteind la page `current' et lance la page `new'."
     current.running = False
     new.run()
 
-if __name__ == '__main__':
 
-    pg.init()
-    screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+def init():
+
+    pages = {}
 
     accueil = Page(screen, pg.sprite.Group(), CLOCK, (255,255,255))
     tuto = Page(screen, pg.sprite.Group(), CLOCK)
@@ -96,17 +126,42 @@ if __name__ == '__main__':
     Button([SCREEN_WIDTH // 4,
                 SCREEN_HEIGHT // 2,
                 SCREEN_WIDTH // 2,
-                SCREEN_HEIGHT // 8 - 10], switch_page, (accueil, tuto)).add(accueil.sprite_list)
+                SCREEN_HEIGHT // 8 - 10], play, None,
+           text="Jouer").add(accueil.sprite_list)
 
-    Button([SCREEN_WIDTH // 4,
-                5 * SCREEN_HEIGHT // 8,
-                SCREEN_WIDTH // 2,
-                SCREEN_HEIGHT // 8 - 10], switch_page, (accueil, tuto)).add(accueil.sprite_list)
+    Button([SCREEN_WIDTH // 4, 5 * SCREEN_HEIGHT // 8,
+            SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8 - 10],
+           switch_page, (accueil, tuto),
+           text="Tutoriel").add(accueil.sprite_list)
 
-    Button([SCREEN_WIDTH // 4,
-                5 * SCREEN_HEIGHT // 8,
-                SCREEN_WIDTH // 2,
-                SCREEN_HEIGHT // 8 - 10], switch_page, (tuto, accueil)).add(tuto.sprite_list)
+    Button([SCREEN_WIDTH // 4, 6 * SCREEN_HEIGHT // 8,
+            SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8 - 10],
+           pg.quit, None,
+           text="Quitter").add(accueil.sprite_list)
 
-    current_page = accueil
-    current_page.run()
+    Button([SCREEN_WIDTH // 4, 5 * SCREEN_HEIGHT // 8,
+            SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8 - 10],
+           switch_page, (tuto, accueil),
+           text="Retour").add(tuto.sprite_list)
+
+    texts = ['Vous êtes Martine, ', 'la voix dans la tête de Jean-Paul.', 'Votre mission, si vous l\'acceptez,', 'est d\'empêcher Jean-Paul d\'aller faire du sport.', 'Pour cela, gavez le d\'Hamburgers !' ]
+
+    for i, line in enumerate(texts):
+        Text(line, (SCREEN_WIDTH // 2, SCREEN_WIDTH // 6 + i * 40)).add(tuto.sprite_list)
+
+    pages['accueil'] = accueil
+    pages['tuto'] = tuto
+
+    return pages
+
+
+if __name__ == '__main__':
+
+    pg.init()
+    pg.font.init()
+
+    screen = pg.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+
+    pages = init()
+
+    pages["accueil"].run()
