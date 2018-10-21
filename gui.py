@@ -92,11 +92,11 @@ def init():
     health_deux = LoadingBar(0.5, (100,40,60), [10, 40, 400, 20])
     GUI_LIST_FOREGROUND.add(health_deux)
 
-    souris = MouseHand([0,0,40,40], "./imgs/mouse_open.png", "./imgs/mouse_close.png")
+    souris = MouseHand([0,0,120,120], "./imgs/mouse_open.png", "./imgs/mouse_close.png")
     GUI_LIST_FOREGROUND.add(souris)
 
-    # background = Background("./imgs/background.png")
-    # GUI_LIST_BACKGROUND.add(background)
+    background = Background("./imgs/background.png")
+    GUI_LIST_BACKGROUND.add(background)
 
 
 def handleGrab():
