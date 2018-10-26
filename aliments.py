@@ -99,7 +99,7 @@ def updateMouseHistory():
 
 
 def handleGrab():
-    "Update food that are grabbed."
+    "Update food that is grabbed."
     mouse = pg.math.Vector2(pg.mouse.get_pos())
     for food in FOOD_LIST:
         center = pg.math.Vector2(food.rect.center)

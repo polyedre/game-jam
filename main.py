@@ -11,9 +11,6 @@ import gui
 import level
 from vars import *
 
-
-
-
 def play(screen):
 
     pages['accueil'].running = False
