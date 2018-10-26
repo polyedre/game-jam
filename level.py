@@ -4,8 +4,8 @@ import pygame as pg
 from vars import *
 
 """
-This file handle the process of a whole level.
-It handle how hard it is, the differents animations, etc.
+This file handles the process of a whole level.
+It handles how hard it is, the differents animations, etc.
 """
 
 class Button(pg.sprite.Sprite):
