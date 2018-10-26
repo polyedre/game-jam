@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pygame as pg
 
 pg.init()
@@ -18,7 +19,7 @@ def play(screen):
     pages['accueil'].running = False
     gui.init()
 
-    head = he.Head((SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), HEAD_SIZE, HEAD_RADIUS)
+    head = he.Head((488, 320), HEAD_SIZE, HEAD_RADIUS)
     head.add(BODY_PARTS_LIST)
     ha.Hand((SCREEN_WIDTH // 4, 3 * SCREEN_HEIGHT // 4), 0, HAND_SPEED, HAND_SIZE, head, True).add(BODY_PARTS_LIST)
     ha.Hand((400,200), 0, HAND_SPEED, HAND_SIZE, head, False).add(BODY_PARTS_LIST)
@@ -52,6 +53,7 @@ def handleKeys(event_list):
         if event.type == pg.MOUSEBUTTONDOWN:
             al.handleGrab()
             gui.handleGrab()
+            print(pg.mouse.get_pos())
 
         if event.type == pg.MOUSEBUTTONUP:
             al.handleUngrab()

@@ -4,53 +4,42 @@ from vars import *
 SLIM, MEDIUM, FAT = 1, 2, 3
 
 class Head(pg.sprite.Sprite):
-    
+
     def __init__(self, _position, _size, _radius):
         pg.sprite.Sprite.__init__(self)
 
-        self.rect = pg.Rect(*_position, _size, _size)
         self.radius = _radius
 
         # Load image files
-        self.image_open = pg.transform.scale(pg.image.load("./imgs/body_slim_mouth_open.png"), (BODY_WIDTH, BODY_HEIGHT))
-        self.image_closed = pg.transform.scale(pg.image.load("./imgs/body_slim_mouth_closed.png"), (BODY_WIDTH, BODY_HEIGHT))
-        self.level = SLIM
+        self.images = list(list())
+        for i in range(3):
+            self.images.append([])
+            for j in range(2):
+                image = pg.image.load("./imgs/perso_{}_{}.png".format(i,j))
+                self.images[i].append(pg.transform.scale(image, (SCREEN_WIDTH // 6 , SCREEN_HEIGHT // 2)))
 
-        self.image = self.image_open
-        self.rect.height = self.image.get_height()
-        self.rect.width = self.image.get_width()
+        self.image = self.images[0][0]
+        self.rect = self.image.get_rect()
+        self.rect.midbottom = (SCREEN_WIDTH // 2, SCREEN_HEIGHT)
 
+        self.mouth = 0
+        self.obesity_level = 0
 
-    def become_medium(self):
-        self.image_open = pg.image.load("./imgs/body_medium_mouth_open.png")
-        self.image_closed = pg.image.load("./imgs/body_medium_mouth_closed.png")
-        self.level = MEDIUM
+        self.counter = 0
 
-    def become_fat(self):
-        self.image_open = pg.image.load("./imgs/body_fat_mouth_open.png")
-        self.image_closed = pg.image.load("./imgs/body_fat_mouth_closed.png")
-        self.level = FAT
-        
+        self.head_pos = pg.Vector2(_position)
+
     def update(self):
         list = pg.sprite.spritecollide(self, FOOD_LIST, False, pg.sprite.collide_circle)
-        for food in list:
-            if food.grabbed or food.caught:
+        for food in FOOD_LIST:
+            if (self.head_pos.distance_to(pg.Vector2(food.rect.center)) < self.radius):
                 food.be_eaten()
-                self.close_mouth()
-        
-        if self.image == self.image_closed:
-            if self.closed_time <= MAX_TIME:
-                self.closed_time += 1
+                self.mouth = 1
+
+        self.image = self.images[self.obesity_level][self.mouth]
+        if self.mouth == 1: # closed
+            if self.counter <= MAX_TIME:
+                self.counter += 1
             else:
-                self.closed_time = 0
-                self.open_mouth()
-                    
-    def open_mouth(self):
-        self.image = self.image_open
-        
-    def close_mouth(self):
-        print("CROUNCH")
-        self.image = self.image_closed
-        self.closed_time = 0
-
-
+                self.counter = 0
+                self.mouth = 0

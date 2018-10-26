@@ -18,9 +18,11 @@ class Hand(pg.sprite.Sprite):
         if self.is_left:
             self.path_open = "./imgs/left_hand_open.png"
             self.path_closed = "./imgs/left_hand_closed.png"
+            self.side_rect = pg.Rect(0, 0, SCREEN_WIDTH // 2, SCREEN_HEIGHT)
         else:
             self.path_open = "./imgs/right_hand_open.png"
             self.path_closed = "./imgs/right_hand_closed.png"
+            self.side_rect = pg.Rect(SCREEN_WIDTH // 2, 0, SCREEN_WIDTH // 2, SCREEN_HEIGHT)
 
         self.image_open = pg.transform.scale(pg.image.load(self.path_open), (_size, _size))
         self.image_closed = pg.transform.scale(pg.image.load(self.path_closed), (_size, _size))
@@ -29,34 +31,21 @@ class Hand(pg.sprite.Sprite):
         self.head = _head
         self.mode = HUNTING
         self.target = None
-        self.set_boundaries()
-
-    def distance(self, sprite):
-        return sqrt(sprite.rect.centerx**2 + sprite.rect.centery**2)
+        # self.set_boundaries()
 
     def choose_target(self):
         """
         Finds closest healthy food and sets it as target
         """
-        min_food = None
-        min_dist = None
-        for food in FOOD_LIST:
-            if food.is_healthy and not food.grabbed and not food.caught:
-                new_dist = self.distance(food)
-                if min_dist == None or new_dist < min_dist:
-                    min_dist = new_dist
-                    min_food = food
-        self.target = min_food
+        couple_lists = [ (pg.Vector2(food.rect.center).distance_squared_to(self.head.rect.center), food) for food in FOOD_LIST]
 
-    def set_boundaries(self):
-        self.top_boundary = self.head.rect.centery - 250
-        self.bottom_boundary = self.head.rect.centery + 100
-        if self.is_left:
-            self.right_boundary = self.head.rect.centerx
-            self.left_boundary = self.right_boundary - 150
+        sided_couple_list = [(dist, food) for dist, food in couple_lists if self.side_rect.colliderect(food.rect)]
+
+        if sided_couple_list:
+            self.target = min(sided_couple_list)[1]
+            self.mode = FOLLOWING
         else:
-            self.left_boundary = self.head.rect.centerx
-            self.right_boundary = self.left_boundary + 150
+            self.target = None
 
     def default_position(self):
         if self.is_left:
@@ -69,37 +58,37 @@ class Hand(pg.sprite.Sprite):
         ret.rect.center = (def_x, def_y)
         return ret
 
-    def move_by(self, dx, dy):
-        new_x = self.rect.centerx + dx
-        new_y = self.rect.centery + dy
-        new_dx = dx
-        new_dy = dy
-        # Correct if wants to go too far
-        if new_x < self.left_boundary:
-            new_dx = self.left_boundary - self.rect.centerx
-        if new_x > self.right_boundary:
-            new_dx = self.right_boundary - self.rect.centerx
-        if new_y > self.bottom_boundary:
-            new_dy = self.bottom_boundary - self.rect.centery
-        if new_y < self.top_boundary:
-            new_dy = self.top_boundary - self.rect.centery
-        # Apply movement
-        self.rect.move_ip(new_dx, new_dy)
+    # def move_by(self, dx, dy):
+    #     new_x = self.rect.centerx + dx
+    #     new_y = self.rect.centery + dy
+    #     new_dx = dx
+    #     new_dy = dy
+    #     # Correct if wants to go too far
+    #     if new_x < self.left_boundary:
+    #         new_dx = self.left_boundary - self.rect.centerx
+    #     if new_x > self.right_boundary:
+    #         new_dx = self.right_boundary - self.rect.centerx
+    #     if new_y > self.bottom_boundary:
+    #         new_dy = self.bottom_boundary - self.rect.centery
+    #     if new_y < self.top_boundary:
+    #         new_dy = self.top_boundary - self.rect.centery
+    #     # Apply movement
+    #     self.rect.move_ip(new_dx, new_dy)
 
-    def move_towards(self, sprite):
-        """
-        Move towards sprite using self.velocity
-        """
-        dx = sprite.rect.centerx - self.rect.centerx
-        dy = sprite.rect.centery - self.rect.centery
-        dist = hypot(dx, dy)
-        if dist == 0:
-            coeff = 0
-        else:
-            coeff = self.velocity / dist
-        dx *= coeff
-        dy *= coeff
-        self.move_by(dx, dy)
+    # def move_towards(self, sprite):
+    #     """
+    #     Move towards sprite using self.velocity
+    #     """
+    #     dx = sprite.rect.centerx - self.rect.centerx
+    #     dy = sprite.rect.centery - self.rect.centery
+    #     dist = hypot(dx, dy)
+    #     if dist == 0:
+    #         coeff = 0
+    #     else:
+    #         coeff = self.velocity / dist
+    #     dx *= coeff
+    #     dy *= coeff
+    #     self.move_by(dx, dy)
 
     def default_position(self):
         if self.is_left:
@@ -112,22 +101,28 @@ class Hand(pg.sprite.Sprite):
         return ret
 
     def update(self):
-        if self.mode == FOLLOWING:
+
+        if self.mode == HUNTING:
+            self.choose_target()
+        elif self.mode == FOLLOWING:
             if self.target.alive(): # condition to keep following this target
                 if pg.sprite.collide_circle(self, self.target):
                     self.target.caught = True
                     self.target.master = self
-                    self.mode = EATING
+                    self.target = self.head
                 else:
-                    self.move_towards(self.target)
+                    direction = pg.Vector2(self.rect.center) - pg.Vector2(self.target.rect.center)
+                    self.rect.move_ip(direction.normalize() * self.velocity)
             else:
                 self.mode = HUNTING
+                self.target = None
         elif self.mode == EATING:
             if pg.sprite.collide_circle(self, self.head):
                 self.target = None
                 self.mode = HUNTING
             else:
-                self.move_towards(self.head)
+                pass
+                # self.(self.head)
         else:
             self.choose_target()
             if self.target == None:

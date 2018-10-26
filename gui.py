@@ -10,17 +10,19 @@ class LoadingBar(pg.sprite.Sprite):
         self.offset_right = offset_right
         self.offset_left = offset_left
         self.exterieur = pg.image.load(ext_img).convert_alpha()
+        self.exterieur = pg.transform.scale(self.exterieur, (300, 60))
         self.rect = self.exterieur.get_rect()
-        self.rect.move_ip(*rect[:2])
+        self.rect.move_ip(rect[:2])
         self.interieur = pg.image.load(int_img).convert_alpha()
-        self.image = pg.surface.Surface((self.rect.width, self.rect.height))
+        self.interieur = pg.transform.scale(self.interieur, (300, 60))
+        self.image = self.exterieur
         self.percentage = 0
 
     def update(self):
-        self.percentage = SCORE // 1000
-        self.image.blit(self.exterieur, self.rect)
+        global SCORE
+        self.percentage = SCORE[0] / 1000
         largeur = (self.exterieur.get_rect().width - (self.offset_right + self.offset_left)) * self.percentage
-        self.image.blit(self.interieur, self.rect.move(self.offset_left, 0), area=[0,0, largeur, 12])
+        self.image.blit(self.interieur, (0, 0), area=[0,0, largeur, 60])
 
 
 class MouseHand(pg.sprite.Sprite):

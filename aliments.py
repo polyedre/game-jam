@@ -23,7 +23,8 @@ class Aliment(pg.sprite.Sprite):
         self.vitesse = pg.math.Vector2(_vitesse)
         self.acceleration = pg.math.Vector2(0, 0)
 
-        self.rect = pg.Rect(*_position, _size, _size)
+        x, y = _position
+        self.rect = pg.Rect(x, y, _size, _size)
         self.radius = FOOD_RADIUS
         self.image_visible = pg.transform.scale(pg.image.load(img_name).convert_alpha(), (_size, _size))
         self.image_invisible = pg.Surface((_size, _size)).convert_alpha()
@@ -58,7 +59,9 @@ class Aliment(pg.sprite.Sprite):
 
     def be_eaten(self):
         global SCORE
-        SCORE += self.size
+        print("Score avant : ", SCORE[0])
+        SCORE[0] += self.size
+        print("Score après : ", SCORE[0])
         FOOD_LIST.remove(self)
 
 
