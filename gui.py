@@ -3,31 +3,26 @@ from vars import *
 
 class LoadingBar(pg.sprite.Sprite):
 
-    def __init__(self, percentage, color, rect, offset_left=0, offset_right=0):
+    def __init__(self, rect, int_img, ext_img, offset_left=0,offset_right=0):
 
         pg.sprite.Sprite.__init__(self)             # Superclass
 
         self.offset_right = offset_right
         self.offset_left = offset_left
-
-        self.exterieur = pg.image.load("./imgs/load_ext.png").convert_alpha()
-        self.interieur = pg.image.load("./imgs/load_int.png").convert_alpha()
-        self.percentage = percentage
-        self.color = color
-        self.rect = pg.Rect(rect)
-
-
-    def draw(self, screen):
-
-        screen.blit(self.exterieur, self.rect)
-        largeur = (self.exterieur.get_rect().width - (self.offset_right + self.offset_left)) * self.percentage
-        screen.blit(self.interieur, self.rect.move(self.offset_left, 0), area=[0,0,largeur,12] )
-
+        self.exterieur = pg.image.load(ext_img).convert_alpha()
+        self.exterieur = pg.transform.scale(self.exterieur, (300, 60))
+        self.rect = self.exterieur.get_rect()
+        self.rect.move_ip(rect[:2])
+        self.interieur = pg.image.load(int_img).convert_alpha()
+        self.interieur = pg.transform.scale(self.interieur, (300, 60))
+        self.image = self.exterieur
+        self.percentage = 0
 
     def update(self):
-
-        if self.percentage < 0.99:
-            self.percentage += 0.01
+        global SCORE
+        self.percentage = SCORE[0] / 1000
+        largeur = (self.exterieur.get_rect().width - (self.offset_right + self.offset_left)) * self.percentage
+        self.image.blit(self.interieur, (0, 0), area=[0,0, largeur, 60])
 
 
 class MouseHand(pg.sprite.Sprite):
@@ -45,17 +40,13 @@ class MouseHand(pg.sprite.Sprite):
 
         self.mouse_open = True
 
-
-    def draw(self, screen):
-
-        if self.mouse_open:
-            screen.blit(self.img_hand_open, self.rect)
-        else:
-            screen.blit(self.img_hand_close, self.rect)
-
-
     def update(self):
         self.rect.center = pg.mouse.get_pos()
+
+        if self.mouse_open:
+            self.image = self.img_hand_open
+        else:
+            self.image = self.img_hand_close
 
 
 class Background(pg.sprite.Sprite):
@@ -64,40 +55,33 @@ class Background(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)             # Superclass
 
         self.offset = 0
-        self.image = pg.image.load(file_name)
+        self.image = pg.image.load(file_name).convert()
         self.image = pg.transform.scale(self.image, (SCREEN_WIDTH * 3, SCREEN_HEIGHT))
-
+        self.rect = self.image.get_rect()
         self.interval = 3 * SCREEN_WIDTH / (SCROLL_TIME * FRAMERATE)
 
 
     def update(self):
         self.offset += self.interval
+        self.rect.topleft = (-self.offset, 0)
         SCROLL_AVANCEMENT =  self.offset / (3 * SCREEN_WIDTH)
-
-
-    def draw(self, screen):
-        screen.blit(self.image, [0,0, SCREEN_WIDTH, SCREEN_HEIGHT], area=[self.offset, 0, SCREEN_WIDTH, SCREEN_HEIGHT])
 
 
 def init():
     """
-    Créé les éléments GUI du jeu :
+    Crée les éléments GUI du jeu :
      - Une barre de vie
      - Une barre d'appétence
      - La souris
     """
-    health = LoadingBar(0.1, (255,0,0), [10, 10, 400, 20])
-    GUI_LIST_FOREGROUND.add(health)
+    LoadingBar([SCREEN_WIDTH // 10, SCREEN_HEIGHT // 10,
+                8 * SCREEN_WIDTH // 10, SCREEN_HEIGHT // 10],
+               "./imgs/load_int.png", "./imgs/load_ext.png").add(GUI_LIST_FOREGROUND)
 
-    health_deux = LoadingBar(0.5, (100,40,60), [10, 40, 400, 20])
-    GUI_LIST_FOREGROUND.add(health_deux)
+    MouseHand([0, 0, 120, 120],
+              "./imgs/mouse_open.png", "./imgs/mouse_close.png").add(GUI_LIST_FOREGROUND)
 
-    souris = MouseHand([0,0,120,120], "./imgs/mouse_open.png", "./imgs/mouse_close.png")
-    GUI_LIST_FOREGROUND.add(souris)
-
-    background = Background("./imgs/background.png")
-    GUI_LIST_BACKGROUND.add(background)
-
+    Background("./imgs/background.png").add(GUI_LIST_BACKGROUND)
 
 def handleGrab():
     for elem in GUI_LIST_FOREGROUND:

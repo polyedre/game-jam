@@ -5,7 +5,6 @@ import pygame as pg
 import random
 from vars import *
 
-
 mouse_history = [(0, 0), (0, 0)]
 
 class Aliment(pg.sprite.Sprite):
@@ -24,16 +23,19 @@ class Aliment(pg.sprite.Sprite):
         self.vitesse = pg.math.Vector2(_vitesse)
         self.acceleration = pg.math.Vector2(0, 0)
 
-        self.rect = pg.Rect(*_position, _size, _size)
+        x, y = _position
+        self.rect = pg.Rect(x, y, _size, _size)
         self.radius = FOOD_RADIUS
-        self.image_visible = pg.transform.scale(pg.image.load(img_name), (50, 50))
-        self.image_invisible = pg.Surface((50, 50)).convert_alpha()
+        self.image_visible = pg.transform.scale(pg.image.load(img_name).convert_alpha(), (_size, _size))
+        self.image_invisible = pg.Surface((_size, _size)).convert_alpha()
         self.image_invisible.fill(pg.Color(100,100,100,0))
         self.image = self.image_visible
 
         self.grabbed = False # by the user
         self.caught = False # by the computer
         self.master = None
+
+        self.size = _size
 
     def update(self):
         "Met à jour les positions et vitesses de l'objet"
@@ -54,10 +56,14 @@ class Aliment(pg.sprite.Sprite):
         if self.rect.x < -100 or self.rect.x > SCREEN_WIDTH + 100\
            or self.rect.y > SCREEN_HEIGHT + 100:
             FOOD_LIST.remove(self)
-    
+
     def be_eaten(self):
-        print("Je meurs ! J'étais healthy :", self.is_healthy)
+        global SCORE
+        print("Score avant : ", SCORE[0])
+        SCORE[0] += self.size
+        print("Score après : ", SCORE[0])
         FOOD_LIST.remove(self)
+
 
 def create_new_aliment(pos=None, vitesse=None,
                        healthy=None, size=None):
@@ -93,7 +99,7 @@ def updateMouseHistory():
 
 
 def handleGrab():
-    "Update food that are grabbed."
+    "Update food that is grabbed."
     mouse = pg.math.Vector2(pg.mouse.get_pos())
     for food in FOOD_LIST:
         center = pg.math.Vector2(food.rect.center)

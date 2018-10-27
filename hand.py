@@ -13,106 +13,145 @@ class Hand(pg.sprite.Sprite):
         self.velocity = _velocity
         self.rect = pg.Rect(*_position, _size, _size)
         self.radius = HAND_RADIUS
-        
-        self.image = pg.transform.scale(pg.image.load("./imgs/circle.png"), (50, 50))
+        self.is_left = _is_left
+
+        if self.is_left:
+            self.path_open = "./imgs/left_hand_open.png"
+            self.path_closed = "./imgs/left_hand_closed.png"
+            self.side_rect = pg.Rect(10, 10, SCREEN_WIDTH // 2 - 10, SCREEN_HEIGHT - 10)
+        else:
+            self.path_open = "./imgs/right_hand_open.png"
+            self.path_closed = "./imgs/right_hand_closed.png"
+            self.side_rect = pg.Rect(SCREEN_WIDTH // 2 + 10, 10, SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10)
+
+        self.image_open = pg.transform.scale(pg.image.load(self.path_open), (_size, _size))
+        self.image_closed = pg.transform.scale(pg.image.load(self.path_closed), (_size, _size))
+        self.image = self.image_open
 
         self.head = _head
-        self.is_left = _is_left
         self.mode = HUNTING
         self.target = None
-        self.set_boundaries()
 
-    def distance(self, sprite):
-        return sqrt(sprite.rect.centerx**2 + sprite.rect.centery**2) 
-        
+    def default_position(self):
+        print("Head rect centerx", self.head.rect.centerx)
+        print("Head rect centery", self.head.rect.centery)
+        if self.is_left:
+            def_x = self.head.rect.centerx - SCREEN_WIDTH//8
+        else:
+            def_x = self.head.rect.centerx + SCREEN_WIDTH//8
+        def_y = self.head.rect.centery + 10
+        return pg.Vector2(def_x, def_y)        
+    
+    def min_couple(self, couple_list):
+        min_dist = 0
+        min_food = None
+        for couple in couple_list:
+            if min_dist == 0 or couple[0] < min_dist:
+                min_dist = couple[0]
+                min_food = couple[1]
+        return (min_dist, min_food)
+
     def choose_target(self):
         """
         Finds closest healthy food and sets it as target
         """
-        min_food = None
-        min_dist = None
-        for food in FOOD_LIST:
-            if food.is_healthy and not food.grabbed and not food.caught:
-                new_dist = self.distance(food)
-                if min_dist == None or new_dist < min_dist:
-                    min_dist = new_dist
-                    min_food = food
-        self.target = min_food
+        couple_lists = [ (pg.Vector2(food.rect.center).distance_squared_to(self.head.rect.center), food) for food in FOOD_LIST]
 
-    def set_boundaries(self):
-        self.top_boundary = self.head.rect.centery - 100
-        self.bottom_boundary = self.head.rect.centery + 100
-        if self.is_left:
-            self.right_boundary = self.head.rect.centerx
-            self.left_boundary = self.right_boundary - 100
+        sided_couple_list = [(dist, food) for dist, food in couple_lists if self.side_rect.colliderect(food.rect)]
+
+        if sided_couple_list:
+            #self.target = min(sided_couple_list)[1] ne fonctionnait pas
+            self.target = self.min_couple(sided_couple_list)[1]
+            self.mode = FOLLOWING
         else:
-            self.left_boundary = self.head.rect.centerx
-            self.right_boundary = self.left_boundary + 100
-        
-    def move_by(self, dx, dy):
-        new_x = self.rect.centerx + dx
-        new_y = self.rect.centery + dy
-        new_dx = dx
-        new_dy = dy
-        # Correct if wants to go too far
-        if new_x < self.left_boundary:
-            new_dx = self.left_boundary - self.rect.centerx
-        if new_x > self.right_boundary:
-            new_dx = self.right_boundary - self.rect.centerx
-        if new_y > self.bottom_boundary:
-            new_dy = self.bottom_boundary - self.rect.centery
-        if new_y < self.top_boundary:
-            new_dy = self.top_boundary - self.rect.centery
-        # Apply movement
-        self.rect.move_ip(new_dx, new_dy)
+            self.target = None
 
-    def move_towards(self, sprite):
-        """
-        Move towards sprite using self.velocity
-        """
-        dx = sprite.rect.centerx - self.rect.centerx
-        dy = sprite.rect.centery - self.rect.centery
-        dist = hypot(dx, dy)
-        if dist == 0:
-            coeff = 0
-        else:
-            coeff = self.velocity / dist
-        dx *= coeff
-        dy *= coeff
-        self.move_by(dx, dy)
+    # def move_by(self, dx, dy):
+    #     new_x = self.rect.centerx + dx
+    #     new_y = self.rect.centery + dy
+    #     new_dx = dx
+    #     new_dy = dy
+    #     # Correct if wants to go too far
+    #     if new_x < self.left_boundary:
+    #         new_dx = self.left_boundary - self.rect.centerx
+    #     if new_x > self.right_boundary:
+    #         new_dx = self.right_boundary - self.rect.centerx
+    #     if new_y > self.bottom_boundary:
+    #         new_dy = self.bottom_boundary - self.rect.centery
+    #     if new_y < self.top_boundary:
+    #         new_dy = self.top_boundary - self.rect.centery
+    #     # Apply movement
+    #     self.rect.move_ip(new_dx, new_dy)
 
-    def default_position(self):
-        if self.is_left:
-            def_x = self.head.rect.centerx - 50
-        else:
-            def_x = self.head.rect.centerx + 50
-        def_y = self.head.rect.centery + 150
-        ret = pg.sprite.Sprite()
-        ret.rect = pg.rect.Rect(def_x, def_y, 1, 1)
-        return ret            
-
+    # def move_towards(self, sprite):
+    #     """
+    #     Move towards sprite using self.velocity
+    #     """
+    #     dx = sprite.rect.centerx - self.rect.centerx
+    #     dy = sprite.rect.centery - self.rect.centery
+    #     dist = hypot(dx, dy)
+    #     if dist == 0:
+    #         coeff = 0
+    #     else:
+    #         coeff = self.velocity / dist
+    #     dx *= coeff
+    #     dy *= coeff
+    #     self.move_by(dx, dy)
+    
     def update(self):
-        if self.mode == FOLLOWING:
-            if self.target.alive(): # condition to keep following this target
+        if self.mode == HUNTING:
+            """
+            This mode is when Hand has no target
+            But is looking for one
+            If none is in its hunting zone, it will move to its default position
+            """
+            self.choose_target()
+            if self.target == None:
+                direction = pg.Vector2(self.rect.center) - self.default_position()
+                self.rect.move_ip(direction.normalize() * self.velocity)                
+            else:
+                self.mode = FOLLOWING
+        elif self.mode == FOLLOWING:
+            """
+            This mode is when Hand has a Sprite of type Aliment
+            as target.
+            It keeps following it until: 
+                * Hand catches target
+                * Target gets too far
+            """
+            if self.target.alive() and self.side_rect.colliderect(self.target.rect): # condition to keep following this target
                 if pg.sprite.collide_circle(self, self.target):
                     self.target.caught = True
                     self.target.master = self
                     self.mode = EATING
                 else:
-                    self.move_towards(self.target)
+                    direction = pg.Vector2(self.rect.center) - pg.Vector2(self.target.rect.center)
+                    self.rect.move_ip(direction.normalize() * self.velocity)
+                    print("FOLLOWING: ", self.target.rect.centerx, self.target.rect.centery)
             else:
                 self.mode = HUNTING
+                self.target = None
         elif self.mode == EATING:
-            if pg.sprite.collide_circle(self, self.head):
-                FOOD_LIST.remove(self.target)
+            """
+            This if for when the target is caught
+            The target is set to follow Hand
+            and Hand moves to Head
+            When Hand and Head collide, the food can be eaten
+            and Hand goes back to hunting
+            """
+            if self.rect.colliderect(self.head.head_rect):
+                self.target.caught = False
+                self.target.master = None
+                self.target.be_eaten()
+                self.head.mouth = 1
                 self.target = None
                 self.mode = HUNTING
             else:
-                self.move_towards(self.head)
+                direction = pg.Vector2(self.rect.center) - self.head.head_pos
+                self.rect.move_ip(direction.normalize() * self.velocity)
         else:
-            self.choose_target()
-            if self.target == None:
-                self.move_towards(self.default_position())
-            else:
-                self.mode = FOLLOWING
-
+            """
+            This should never happen
+            """
+            print("Error: what the heck is this mode ?")
+            self.mode = HUNTING
