@@ -96,7 +96,7 @@ def create_new_aliment(pos=None, vitesse=None,
 
     aliment = Aliment(pos, vitesse, healthy, size)
 
-    FOOD_LIST.add(aliment)
+    return aliment
 
 
 def updateMouseHistory():

@@ -1,12 +1,22 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import pygame as pg
+import random
+import aliments as al
 from vars import *
 
 """
 This file handles the process of a whole level.
 It handles how hard it is, the differents animations, etc.
 """
+
+def home_page_action():
+    liste = []
+    r = random.randint(0,1000)
+    if r > 800:
+        aliment = al.create_new_aliment()
+        liste.append(aliment)
+    return liste
 
 class Button(pg.sprite.Sprite):
 
@@ -64,7 +74,8 @@ class Text(pg.sprite.Sprite):
 
 class Page():
 
-    def __init__(self, screen, sprite_list, clock, bg_color = (0,0,0)):
+    def __init__(self, screen, sprite_list, clock, bg_color = (0,0,0), function=None):
+        self.function = function
         self.screen = screen
         self.clock = clock
         self.bg = bg_color
@@ -81,6 +92,10 @@ class Page():
             self.update()
             self.draw()
             self.keys()
+            if self.function:
+                liste = self.function()
+                for elem in liste:
+                    elem.add(self.sprite_list)
 
             CLOCK.tick(FRAMERATE)
 
@@ -94,6 +109,7 @@ class Page():
 
     def update(self):
         self.sprite_list.update()
+        
 
     def keys(self, event_list = None):
         if not event_list:
@@ -120,9 +136,8 @@ def init(screen):
 
     pages = {}
 
-    accueil = Page(screen, pg.sprite.Group(), CLOCK, (255,255,255))
+    accueil = Page(screen, pg.sprite.Group(), CLOCK, (255,255,255),function=home_page_action)
     tuto = Page(screen, pg.sprite.Group(), CLOCK)
-
 
     Button([SCREEN_WIDTH // 4, 5 * SCREEN_HEIGHT // 8,
             SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8 - 10],
