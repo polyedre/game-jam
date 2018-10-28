@@ -33,7 +33,7 @@ class Aliment(pg.sprite.Sprite):
 
         self.grabbed = False # by the user
         self.caught = False # by the computer
-        self.master = None
+        self.master = None # Sprite to follow
 
         self.size = _size
 
@@ -44,7 +44,7 @@ class Aliment(pg.sprite.Sprite):
         if self.grabbed:
             self.rect.center = pg.mouse.get_pos()
         elif self.caught:
-            self.rect = self.master.rect
+            self.rect.center = self.master.rect.center
         else:
             self.acceleration += GRAVITY
             self.vitesse += self.acceleration
@@ -58,10 +58,16 @@ class Aliment(pg.sprite.Sprite):
             FOOD_LIST.remove(self)
 
     def be_eaten(self):
-        global SCORE
-        print("Score avant : ", SCORE[0])
-        SCORE[0] += self.size
-        print("Score après : ", SCORE[0])
+        if not self.is_healthy:
+            global SCORE
+            print("Score avant : ", SCORE[0])
+            SCORE[0] += self.size
+            print("Score après : ", SCORE[0])
+        if self.caught:
+            self.caught = False
+            self.master.target = None
+            self.master.mode = HUNTING
+            self.master = None
         FOOD_LIST.remove(self)
 
 
