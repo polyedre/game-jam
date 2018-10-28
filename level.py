@@ -91,10 +91,8 @@ class Page():
 
         running = True
 
-        # if self.sound:
-        #          self.sound.play(-1)
         if is_first:
-           self.music.play() 
+           self.music.play(-1)
         
         while running:
 
@@ -111,12 +109,6 @@ class Page():
                 self.hooked_function()
                 self.keys()
             CLOCK.tick(FRAMERATE)
-
-        # if self.sound:
-        #          self.sound.stop()
-     #def start(self):
-     #    self.music.play()
-     #    self.run()
     
     def draw(self):
         "Dessine le contenu de l'ecran"
@@ -134,7 +126,9 @@ class Page():
             event_list = pg.event.get()
 
         for event in event_list:
-
+            if event.type == pg.QUIT:
+                pg.quit()
+                exit(0)
             if event.type == pg.MOUSEBUTTONDOWN:
                 for b in (b for b in self.sprite_list if isinstance(b, Button)):
                     if b.rect.collidepoint(pg.mouse.get_pos()):
@@ -148,7 +142,7 @@ def switch_page(current, new):
     "Éteind la page `current' et lance la page `new'."
     if current.music != new.music:
         current.music.fadeout(100)
-        new.music.play()
+        new.music.play(-1)
     current.running = False
     new.run()
 
