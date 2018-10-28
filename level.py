@@ -69,6 +69,8 @@ class Page():
         self.clock = clock
         self.bg = bg_color
 
+        self.hooked_function = lambda : None
+        self.hooked_args = None
         self.sprite_list = sprite_list
 
 
@@ -79,9 +81,13 @@ class Page():
         while running:
 
             self.update()
-            self.draw()
+            if self.bg:
+                self.draw()
+            if self.hooked_args:
+                self.hooked_function(*self.hooked_args)
+            else:
+                self.hooked_function()
             self.keys()
-
             CLOCK.tick(FRAMERATE)
 
     def draw(self):
@@ -122,6 +128,9 @@ def init(screen):
 
     accueil = Page(screen, pg.sprite.Group(), CLOCK, (255,255,255))
     tuto = Page(screen, pg.sprite.Group(), CLOCK)
+    victory = Page(screen, pg.sprite.Group(), CLOCK, (110,200,100))
+    defeat = Page(screen, pg.sprite.Group(), CLOCK, (250,100,100))
+    play = Page(screen, pg.sprite.Group(), CLOCK, bg_color = None)
 
 
     Button([SCREEN_WIDTH // 4, 5 * SCREEN_HEIGHT // 8,
@@ -144,8 +153,29 @@ def init(screen):
     for i, line in enumerate(texts):
         Text(line, (SCREEN_WIDTH // 2, SCREEN_WIDTH // 6 + i * 40)).add(tuto.sprite_list)
 
+    Text("Vous avez gagné !", (SCREEN_WIDTH // 2, SCREEN_WIDTH // 4)).add(victory.sprite_list)
+    Text("Vous avez perdu !", (SCREEN_WIDTH // 2, SCREEN_WIDTH // 4)).add(defeat.sprite_list)
+
+    Button([SCREEN_WIDTH // 4, 5 * SCREEN_HEIGHT // 8,
+            SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8 - 10],
+           switch_page, (victory, accueil),
+           text="Accueil").add(victory.sprite_list)
+
+    Button([SCREEN_WIDTH // 4, 5 * SCREEN_HEIGHT // 8,
+            SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8 - 10],
+           switch_page, (defeat, accueil),
+           text="Accueil").add(defeat.sprite_list)
+
+    Button([SCREEN_WIDTH // 4, SCREEN_HEIGHT // 2,
+            SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8 - 10],
+           switch_page, (accueil, play),
+           text="Jouer").add(accueil.sprite_list)
+
     pages['accueil'] = accueil
     pages['tuto'] = tuto
+    pages['victoire'] = victory
+    pages['defeat'] = defeat
+    pages['play'] = play
 
     return pages
 

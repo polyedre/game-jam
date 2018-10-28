@@ -33,15 +33,13 @@ class Hand(pg.sprite.Sprite):
         self.target = None
 
     def default_position(self):
-        print("Head rect centerx", self.head.rect.centerx)
-        print("Head rect centery", self.head.rect.centery)
         if self.is_left:
             def_x = self.head.rect.centerx - SCREEN_WIDTH//8
         else:
             def_x = self.head.rect.centerx + SCREEN_WIDTH//8
         def_y = self.head.rect.centery + 10
-        return pg.Vector2(def_x, def_y)        
-    
+        return pg.Vector2(def_x, def_y)
+
     def min_couple(self, couple_list):
         min_dist = 0
         min_food = None
@@ -97,7 +95,7 @@ class Hand(pg.sprite.Sprite):
     #     dx *= coeff
     #     dy *= coeff
     #     self.move_by(dx, dy)
-    
+
     def update(self):
         if self.mode == HUNTING:
             """
@@ -108,15 +106,15 @@ class Hand(pg.sprite.Sprite):
             self.choose_target()
             if self.target == None:
                 direction = self.default_position() - pg.Vector2(self.rect.center)
-                if direction.length != 0:
-                    self.rect.move_ip(direction.normalize() * self.velocity)                
+                if direction.length() > 0:
+                    self.rect.move_ip(direction.normalize() * self.velocity)
             else:
                 self.mode = FOLLOWING
         elif self.mode == FOLLOWING:
             """
             This mode is when Hand has a Sprite of type Aliment
             as target.
-            It keeps following it until: 
+            It keeps following it until:
                 * Hand catches target
                 * Target gets too far
             """
@@ -128,8 +126,8 @@ class Hand(pg.sprite.Sprite):
                     self.mode = EATING
                 else:
                     direction = pg.Vector2(self.target.rect.center) - pg.Vector2(self.rect.center)
-                    self.rect.move_ip(direction.normalize() * self.velocity)
-                    print("FOLLOWING: ", self.target.rect.width, self.target.rect.height)
+                    if (direction.length() > 0):
+                        self.rect.move_ip(direction.normalize() * self.velocity)
             else:
                 self.mode = HUNTING
                 self.target = None

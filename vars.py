@@ -4,7 +4,7 @@ import pygame as pg
 GAME_NAME = "Eat and never run"
 SCREEN_WIDTH = 1920 // 2
 SCREEN_HEIGHT = 1080 // 2
-FRAMERATE = 10
+FRAMERATE = 30
 RUNNING = True
 FONT = pg.font.Font(None, 40)
 
@@ -23,7 +23,7 @@ CLOCK = pg.time.Clock()
 # DYNAMIC
 GRAVITY = pg.math.Vector2(0, 0.3)
 GRAB_DISTANCE = 50
-SCROLL_TIME = 60 # seconds
+SCROLL_TIME = 10 # seconds
 SCROLL_AVANCEMENT = 0
 HAND_SPEED = 10
 SCORE = [0]
