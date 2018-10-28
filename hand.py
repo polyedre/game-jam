@@ -2,8 +2,6 @@ import pygame as pg
 from math import hypot, sqrt
 from vars import *
 
-HUNTING, FOLLOWING, EATING = 1, 2, 3
-
 class Hand(pg.sprite.Sprite):
 
     def __init__(self, _position, _zone, _velocity, _size, _head, _is_left):
@@ -33,8 +31,6 @@ class Hand(pg.sprite.Sprite):
         self.target = None
 
     def default_position(self):
-        print("Head rect centerx", self.head.rect.centerx)
-        print("Head rect centery", self.head.rect.centery)
         if self.is_left:
             def_x = self.head.rect.centerx - SCREEN_WIDTH//8
         else:
@@ -55,12 +51,11 @@ class Hand(pg.sprite.Sprite):
         """
         Finds closest healthy food and sets it as target
         """
-        couple_lists = [ (pg.Vector2(food.rect.center).distance_squared_to(self.head.rect.center), food) for food in FOOD_LIST]
+        healthy_couple_list = [ (pg.Vector2(food.rect.center).distance_squared_to(self.head.head_rect.center), food) for food in FOOD_LIST if food.is_healthy]
 
-        sided_couple_list = [(dist, food) for dist, food in couple_lists if self.side_rect.colliderect(food.rect)]
+        sided_couple_list = [(dist, food) for dist, food in healthy_couple_list if self.side_rect.colliderect(food.rect)]
 
         if sided_couple_list:
-            #self.target = min(sided_couple_list)[1] ne fonctionnait pas
             self.target = self.min_couple(sided_couple_list)[1]
             self.mode = FOLLOWING
         else:
@@ -108,7 +103,8 @@ class Hand(pg.sprite.Sprite):
             self.choose_target()
             if self.target == None:
                 direction = self.default_position() - pg.Vector2(self.rect.center)
-                if direction.length != 0:
+                if direction.length() < self.velocity: # to avoid flickering
+                    # otherwise goes back and forth around default_position
                     self.rect.move_ip(direction.normalize() * self.velocity)                
             else:
                 self.mode = FOLLOWING
@@ -129,7 +125,7 @@ class Hand(pg.sprite.Sprite):
                 else:
                     direction = pg.Vector2(self.target.rect.center) - pg.Vector2(self.rect.center)
                     self.rect.move_ip(direction.normalize() * self.velocity)
-                    print("FOLLOWING: ", self.target.rect.width, self.target.rect.height)
+                    #print("FOLLOWING: ", self.target.rect.width, self.target.rect.height)
             else:
                 self.mode = HUNTING
                 self.target = None
@@ -141,17 +137,9 @@ class Hand(pg.sprite.Sprite):
             When Hand and Head collide, the food can be eaten
             and Hand goes back to hunting
             """
-            if self.rect.colliderect(self.head.head_rect):
-                self.target.caught = False
-                self.target.master = None
-                self.target.be_eaten()
-                self.head.mouth = 1
-                self.target = None
-                self.mode = HUNTING
-            else:
-                direction = self.head.head_pos - pg.Vector2(self.rect.center)
-                if direction.length != 0:
-                    self.rect.move_ip(direction.normalize() * self.velocity)
+            direction = self.head.head_pos - pg.Vector2(self.rect.center)
+            if direction.length() != 0:
+                self.rect.move_ip(direction.normalize() * self.velocity)
         else:
             """
             This should never happen
