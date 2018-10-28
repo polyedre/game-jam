@@ -92,6 +92,10 @@ class Page():
         while running:
 
             self.update()
+            if self.function:
+                liste = self.function()
+                for elem in liste:
+                    elem.add(self.sprite_list)
             if self.bg:
                 self.draw()
             if self.hooked_args:
@@ -139,9 +143,9 @@ def init(screen):
     pages = {}
 
     accueil = Page(screen, pg.sprite.Group(), CLOCK, (255,255,255),function=home_page_action)
-    tuto = Page(screen, pg.sprite.Group(), CLOCK)
-    victory = Page(screen, pg.sprite.Group(), CLOCK, (110,200,100))
-    defeat = Page(screen, pg.sprite.Group(), CLOCK, (250,100,100))
+    tuto = Page(screen, pg.sprite.Group(), CLOCK,(0,0,0),function=home_page_action)
+    victory = Page(screen, pg.sprite.Group(), CLOCK, (110,200,100),function=home_page_action)
+    defeat = Page(screen, pg.sprite.Group(), CLOCK, (250,100,100),function=home_page_action)
     play = Page(screen, pg.sprite.Group(), CLOCK, bg_color = None)
 
     Button([SCREEN_WIDTH // 4, 5 * SCREEN_HEIGHT // 8,

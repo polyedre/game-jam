@@ -23,7 +23,7 @@ CLOCK = pg.time.Clock()
 # DYNAMIC
 GRAVITY = pg.math.Vector2(0, 0.3)
 GRAB_DISTANCE = 50
-SCROLL_TIME = 10 # seconds
+SCROLL_TIME = 120 # seconds
 SCROLL_AVANCEMENT = 0
 HAND_SPEED = 10
 SCORE = [0]

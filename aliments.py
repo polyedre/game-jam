@@ -18,7 +18,7 @@ class Aliment(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)             # Superclass
 
         self.is_healthy = _healthy
-        img_name = ("./imgs/green-circle.png" if _healthy else "./imgs/orange-circle.png")
+        img_name = ("./imgs/salade.png" if _healthy else "./imgs/hamburger.png")
 
         self.vitesse = pg.math.Vector2(_vitesse)
         self.acceleration = pg.math.Vector2(0, 0)
@@ -62,6 +62,12 @@ class Aliment(pg.sprite.Sprite):
             global SCORE
             print("Score avant : ", SCORE[0])
             SCORE[0] += self.size
+            print("Score après : ", SCORE[0])
+        if self.is_healthy:
+            print("Score avant : ", SCORE[0])
+            SCORE[0] -= self.size//2 #pour moduler la difficulte
+            if SCORE[0] < 0: #pour ne pas avoir un score négatif
+                SCORE[0] = 0
             print("Score après : ", SCORE[0])
         if self.caught:
             self.caught = False
