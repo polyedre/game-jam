@@ -3,6 +3,7 @@
 import pygame as pg
 import random
 import aliments as al
+import sound
 from vars import *
 
 """
@@ -74,7 +75,7 @@ class Text(pg.sprite.Sprite):
 
 class Page():
 
-    def __init__(self, screen, sprite_list, clock, bg_color = (0,0,0), function=None):
+    def __init__(self, screen, sprite_list, clock, bg_color = (0,0,0), function=None, music=None):
         self.function = function
         self.screen = screen
         self.clock = clock
@@ -83,8 +84,8 @@ class Page():
         self.hooked_function = lambda : None
         self.hooked_args = None
         self.sprite_list = sprite_list
-
-        # self.sound = sound
+        if music:
+            self.music = music
 
     def run(self):
 
@@ -111,7 +112,10 @@ class Page():
 
         # if self.sound:
         #          self.sound.stop()
-
+     #def start(self):
+     #    self.music.play()
+     #    self.run()
+    
     def draw(self):
         "Dessine le contenu de l'ecran"
         self.screen.fill(self.bg)
@@ -140,20 +144,22 @@ class Page():
 
 def switch_page(current, new):
     "Éteind la page `current' et lance la page `new'."
+    if current.music != new.music:
+        current.music.fadeout(100)
+        new.music.play()
     current.running = False
     new.run()
-
 
 def init(screen):
 
     pages = {}
 
     accueil = Page(screen, pg.sprite.Group(), CLOCK, (255,255,255),
-                   function=home_page_action)
-    tuto = Page(screen, pg.sprite.Group(), CLOCK,(0,0,0),function=home_page_action)
-    victory = Page(screen, pg.sprite.Group(), CLOCK, (110,200,100),function=home_page_action)
-    defeat = Page(screen, pg.sprite.Group(), CLOCK, (250,100,100),function=home_page_action)
-    play = Page(screen, pg.sprite.Group(), CLOCK, bg_color = None)
+                   function=home_page_action, music=sound.intro_music)
+    tuto = Page(screen, pg.sprite.Group(), CLOCK,(0,0,0),function=home_page_action, music=sound.intro_music)
+    victory = Page(screen, pg.sprite.Group(), CLOCK, (110,200,100),function=home_page_action, music=sound.intro_music)
+    defeat = Page(screen, pg.sprite.Group(), CLOCK, (250,100,100),function=home_page_action, music=sound.intro_music)
+    play = Page(screen, pg.sprite.Group(), CLOCK, bg_color = None, music=sound.run_music)
 
     Button([SCREEN_WIDTH // 4, 5 * SCREEN_HEIGHT // 8,
             SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8 - 10],
@@ -216,4 +222,5 @@ if __name__ == '__main__':
 
     pages = init()
 
+    pages["accueil"].music.play()
     pages["accueil"].run()

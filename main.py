@@ -114,4 +114,5 @@ if __name__ == '__main__':
 
     load_game()
 
+    pages["accueil"].music.play()
     pages['accueil'].run()
