@@ -84,10 +84,14 @@ class Page():
         self.hooked_args = None
         self.sprite_list = sprite_list
 
+        # self.sound = sound
 
     def run(self):
 
         running = True
+
+        # if self.sound:
+        #          self.sound.play(-1)
 
         while running:
 
@@ -104,6 +108,9 @@ class Page():
                 self.hooked_function()
                 self.keys()
             CLOCK.tick(FRAMERATE)
+
+        # if self.sound:
+        #          self.sound.stop()
 
     def draw(self):
         "Dessine le contenu de l'ecran"
@@ -141,7 +148,8 @@ def init(screen):
 
     pages = {}
 
-    accueil = Page(screen, pg.sprite.Group(), CLOCK, (255,255,255),function=home_page_action)
+    accueil = Page(screen, pg.sprite.Group(), CLOCK, (255,255,255),
+                   function=home_page_action)
     tuto = Page(screen, pg.sprite.Group(), CLOCK,(0,0,0),function=home_page_action)
     victory = Page(screen, pg.sprite.Group(), CLOCK, (110,200,100),function=home_page_action)
     defeat = Page(screen, pg.sprite.Group(), CLOCK, (250,100,100),function=home_page_action)
@@ -167,8 +175,13 @@ def init(screen):
     for i, line in enumerate(texts):
         Text(line, (SCREEN_WIDTH // 2, SCREEN_WIDTH // 6 + i * 40)).add(tuto.sprite_list)
 
-    Text("Vous avez gagné !", (SCREEN_WIDTH // 2, SCREEN_WIDTH // 4)).add(victory.sprite_list)
-    Text("Vous avez perdu !", (SCREEN_WIDTH // 2, SCREEN_WIDTH // 4)).add(defeat.sprite_list)
+    Text("Vous avez gagné !", (SCREEN_WIDTH // 2, 2 * SCREEN_HEIGHT // 8)).add(victory.sprite_list)
+    Text("Jean-Paul n'a pas pu aller faire du sport", (SCREEN_HEIGHT // 2, 3 * SCREEN_WIDTH // 8)).add(victory.sprite_list)
+    Text("il est mort d'obesité. Bravo", (SCREEN_WIDTH // 2, 4 * SCREEN_HEIGHT // 8)).add(victory.sprite_list)
+
+    Text("Vous avez perdu !", (SCREEN_WIDTH // 2, 2 * SCREEN_HEIGHT // 8)).add(defeat.sprite_list)
+    Text("Jean-Paul a pu aller faire du sport", (SCREEN_WIDTH // 2, 3 * SCREEN_HEIGHT // 8)).add(defeat.sprite_list)
+    Text("il est toujours vivant. Je ne vous félicite pas.", (SCREEN_WIDTH // 2, 4 * SCREEN_HEIGHT // 8)).add(defeat.sprite_list)
 
     Button([SCREEN_WIDTH // 4, 5 * SCREEN_HEIGHT // 8,
             SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8 - 10],

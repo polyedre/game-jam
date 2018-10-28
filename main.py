@@ -3,6 +3,7 @@ import pygame as pg
 
 pg.init()
 pg.font.init()
+pg.mixer.init()
 
 import aliments as al
 import hand as ha
@@ -69,7 +70,7 @@ def finished_run_animation(screen):
 
     load_game()
 
-    if mem > 1000:
+    if mem > 750:
         level.switch_page(pages["play"], pages["victoire"])
     else:
         level.switch_page(pages["play"], pages["defeat"])
