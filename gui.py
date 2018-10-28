@@ -64,7 +64,10 @@ class Background(pg.sprite.Sprite):
     def update(self):
         self.offset += self.interval
         self.rect.topleft = (-self.offset, 0)
-        SCROLL_AVANCEMENT =  self.offset / (3 * SCREEN_WIDTH)
+        global SCROLL_AVANCEMENT
+        SCROLL_AVANCEMENT =  self.offset / (2 * SCREEN_WIDTH)
+        if SCROLL_AVANCEMENT > 1:
+            pg.event.post(pg.event.Event(FINISHED_RUN))
 
 
 def init():
