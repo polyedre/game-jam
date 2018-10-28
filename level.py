@@ -87,13 +87,15 @@ class Page():
         if music:
             self.music = music
 
-    def run(self):
+    def run(self, is_first=False):
 
         running = True
 
         # if self.sound:
         #          self.sound.play(-1)
-
+        if is_first:
+           self.music.play() 
+        
         while running:
 
             self.update()
@@ -222,5 +224,4 @@ if __name__ == '__main__':
 
     pages = init()
 
-    pages["accueil"].music.play()
-    pages["accueil"].run()
+    pages["accueil"].run(True)
