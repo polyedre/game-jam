@@ -4,7 +4,7 @@ import pygame as pg
 GAME_NAME = "Eat and never run"
 SCREEN_WIDTH = 1920 // 2
 SCREEN_HEIGHT = 1080 // 2
-FRAMERATE = 30
+FRAMERATE = 10
 RUNNING = True
 FONT = pg.font.Font(None, 40)
 
