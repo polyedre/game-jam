@@ -4,6 +4,7 @@
 import pygame as pg
 import random
 import sound
+from gui import MouseHand
 from vars import *
 
 mouse_history = [(0, 0), (0, 0)]
@@ -111,16 +112,23 @@ def updateMouseHistory():
 
 def handleGrab():
     "Update food that is grabbed."
-    # TODO: make grab distance proportionnal to size
-    # I think : create invisible sprite that follows the mouse
-    # and check for its intersection with food.rect
+    # UNCOMMENT the following section for harder grabbing
+    # ---------------------------------------------------
     mouse = pg.math.Vector2(pg.mouse.get_pos())
     for food in FOOD_LIST:
         center = pg.math.Vector2(food.rect.center)
         if not food.caught and (center - mouse).length() < GRAB_DISTANCE:
-            food.grabbed = True
-            food.vitesse *= 0
-            food.image = food.image_invisible
+             food.grabbed = True
+             food.vitesse *= 0
+             food.image = food.image_invisible
+    # UNCOMMENT the following section for easier grabbing
+    # ---------------------------------------------------
+    # for food in FOOD_LIST:
+    #     for elem in GUI_LIST_FOREGROUND:
+    #         if isinstance(elem, MouseHand) and elem.rect.colliderect(food.rect):
+    #             food.grabbed = True
+    #             food.vitesse *= 0
+    #             food.image = food.image_invisible
 
 
 def handleUngrab():
