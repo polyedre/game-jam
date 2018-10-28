@@ -1,12 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import pygame as pg
+import random
+import aliments as al
 from vars import *
 
 """
 This file handles the process of a whole level.
 It handles how hard it is, the differents animations, etc.
 """
+
+def home_page_action():
+    liste = []
+    r = random.randit(0,1000)
+    if r > 999:
+        al.create_new_aliment(liste)
+    return liste
 
 class Button(pg.sprite.Sprite):
 
@@ -94,6 +103,7 @@ class Page():
 
     def update(self):
         self.sprite_list.update()
+        
 
     def keys(self, event_list = None):
         if not event_list:
@@ -123,6 +133,7 @@ def init(screen):
     accueil = Page(screen, pg.sprite.Group(), CLOCK, (255,255,255))
     tuto = Page(screen, pg.sprite.Group(), CLOCK)
 
+    
 
     Button([SCREEN_WIDTH // 4, 5 * SCREEN_HEIGHT // 8,
             SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8 - 10],

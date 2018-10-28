@@ -45,7 +45,7 @@ def handleKeys(event_list):
             exit(0)
 
         if event.type == pg.USEREVENT:
-            al.create_new_aliment()
+            al.create_new_aliment(FOOD_LIST)
 
         if event.type == pg.MOUSEBUTTONDOWN:
             al.handleGrab()

@@ -1,0 +1,63 @@
+#+TITLE: GAME JAM #1
+#+AUTHOR: Chapal Victor, Henry Lucas, Choisy Floris
+
+* Description du jeu
+** Synopsis
+Vous êtes Martine, la petite voix dans la tête d'un anorexique et vous voulez lui faire prendre du poids.
+Il va donc devoir manger un maximum de junk food.
+** Description d'une session de jeu
+Le jeu commence, notre personnage est au milieu de l'écran, fixe physiquement il est très fin.
+Lorsque l'on bouge la souris un bras suit la souris. Il est limité à une distance assez courte et le bras est replié.
+Lorsque l'on passe la souris d'un côté à l'autre du personnage, le focus change de bras.
+Lorsque l'on clique, le joueur lance son bras vers l'extérieur, c'est à dire dans la direction de la souris.
+Si c'était un clic droit, le poing est ouvert. Si sur son chemin le poing croise un aliment, il le ramène à sa bouche.
+Si c'était un clic gauche, tous les aliments croisés sur le chemin sont expédiés vers l'extérieur.
+Le joueur doit choisir quels aliments éjecter et quels aliments manger.
+Les aliments sont projetés sur le joueur de façon aléatoire.
+La salade est mangée directement par le joueur sans avoir besoin de l'attraper.
+Si la main est lancée, il faut attendre la fin du repli avant de reprendre le contrôle.
+Le déplacement des bras ne se fait pas en se téléportant, il se rapproche au fur et à mesure de la souris quand il est replié.
+** Principe
+*** Pour gagner
+Il faut faire grossir son personnage jusqu'à l'indigestion et le faire exploser.
+*** Pour perdre
+S'il mange trop d'aliments sains, il va faire se rendre compte que c'est bon et risque d'aller faire du sport pour s'entretenir.
+
+* Liste des tâches à faire
+
+** Jeu globalement fonctionnel sans graphismes
+Le personnage est un rectangle, son bras est un rectangle, les aliments sont de deux couleurs différentes.
+Il faut donc gérer :
+
+  - Le déplacement du bras autour du personnage
+  - l'extension du bras lors des clics : voir les animations
+  - La répulsion des aliments selon le vecteur (centre poing -> centre_aliment)
+
+** Liste des graphismes à dessiner
+ TODO : Donner les dimensions des bras étendus / repliés
+
+*** 3 personnages
+Pour 3 personnages de niveaux de graisse différents :
+  - Un bras
+    - Étendu
+    - Replié
+  - Le corps
+
+*CONDITIONS :* On doit comprendre que les 3 personnages sont une seule et même personne, il doit donc avoir les mêmes personnages.
+
+*** Autres éléments
+Et en plus.
+  - Les aliments (au moins une salade et un hamburger)
+  - Une barre de chargement pour voir l'état de notre personnage dans son niveau (à chaque fois qu'il rempli un niveau, il se transforme et
+    devient plus gros).
+    Barre rouge avec un logo hamburger devant
+  - Une barre d'appétence pour les aliments sains. Si est se rempli la partie est perdue car le personnage va se mettre au sport.
+    Barre verte avec un logo de salade devant
+
+*Conditions :* Les barres doivent se charger au fur et à mesure.
+
+* En plus précis
+
+** Déplacement du bras autour du personnage
+
+  - Faire 2 rectangles liés à la façon des os dans blender.

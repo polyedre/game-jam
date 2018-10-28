@@ -65,7 +65,7 @@ class Aliment(pg.sprite.Sprite):
         FOOD_LIST.remove(self)
 
 
-def create_new_aliment(pos=None, vitesse=None,
+def create_new_aliment(liste, pos=None, vitesse=None,
                        healthy=None, size=None):
     """
     Créé un nouvel aliment et l'ajoute à la liste des aliments.
@@ -90,7 +90,7 @@ def create_new_aliment(pos=None, vitesse=None,
 
     aliment = Aliment(pos, vitesse, healthy, size)
 
-    FOOD_LIST.add(aliment)
+    liste.add(aliment)
 
 
 def updateMouseHistory():
