@@ -102,7 +102,7 @@ class Page():
                 self.hooked_function(*self.hooked_args)
             else:
                 self.hooked_function()
-            self.keys()
+                self.keys()
             CLOCK.tick(FRAMERATE)
 
     def draw(self):
@@ -115,7 +115,6 @@ class Page():
 
     def update(self):
         self.sprite_list.update()
-        
 
     def keys(self, event_list = None):
         if not event_list:
@@ -155,7 +154,7 @@ def init(screen):
 
     Button([SCREEN_WIDTH // 4, 6 * SCREEN_HEIGHT // 8,
             SCREEN_WIDTH // 2, SCREEN_HEIGHT // 8 - 10],
-           pg.quit, None,
+           exit, None,
            text="Quitter").add(accueil.sprite_list)
 
     Button([SCREEN_WIDTH // 4, 5 * SCREEN_HEIGHT // 8,
