@@ -15,10 +15,7 @@ class Head(pg.sprite.Sprite):
         for i in range(3):
             self.images.append([])
             for j in range(2):
-                # TODO: UNCOMMENT FOLLOWING LINE
-                #image = pg.image.load("./imgs/perso_{}_{}.png".format(i,j))
-                # TEMPORARY
-                image = pg.image.load("./imgs/mouse_hand_open.png")
+                image = pg.image.load("./imgs/perso_{}_{}.png".format(i,j))
                 self.images[i].append(pg.transform.scale(image, (SCREEN_WIDTH // 6 , SCREEN_HEIGHT // 2)))
 
         self.image = self.images[0][0]

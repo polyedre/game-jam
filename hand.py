@@ -107,8 +107,9 @@ class Hand(pg.sprite.Sprite):
             """
             self.choose_target()
             if self.target == None:
-                direction = pg.Vector2(self.rect.center) - self.default_position()
-                self.rect.move_ip(direction.normalize() * self.velocity)                
+                direction = self.default_position() - pg.Vector2(self.rect.center)
+                if direction.length != 0:
+                    self.rect.move_ip(direction.normalize() * self.velocity)                
             else:
                 self.mode = FOLLOWING
         elif self.mode == FOLLOWING:
@@ -119,15 +120,16 @@ class Hand(pg.sprite.Sprite):
                 * Hand catches target
                 * Target gets too far
             """
-            if self.target.alive() and self.side_rect.colliderect(self.target.rect): # condition to keep following this target
-                if pg.sprite.collide_circle(self, self.target):
+            if self.target.alive() \
+               and self.side_rect.colliderect(self.target.rect):
+                if self.rect.colliderect(self.target.rect):
                     self.target.caught = True
                     self.target.master = self
                     self.mode = EATING
                 else:
-                    direction = pg.Vector2(self.rect.center) - pg.Vector2(self.target.rect.center)
+                    direction = pg.Vector2(self.target.rect.center) - pg.Vector2(self.rect.center)
                     self.rect.move_ip(direction.normalize() * self.velocity)
-                    print("FOLLOWING: ", self.target.rect.centerx, self.target.rect.centery)
+                    print("FOLLOWING: ", self.target.rect.width, self.target.rect.height)
             else:
                 self.mode = HUNTING
                 self.target = None
@@ -147,8 +149,9 @@ class Hand(pg.sprite.Sprite):
                 self.target = None
                 self.mode = HUNTING
             else:
-                direction = pg.Vector2(self.rect.center) - self.head.head_pos
-                self.rect.move_ip(direction.normalize() * self.velocity)
+                direction = self.head.head_pos - pg.Vector2(self.rect.center)
+                if direction.length != 0:
+                    self.rect.move_ip(direction.normalize() * self.velocity)
         else:
             """
             This should never happen
