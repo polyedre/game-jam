@@ -66,6 +66,8 @@ class Aliment(pg.sprite.Sprite):
         if self.is_healthy:
             print("Score avant : ", SCORE[0])
             SCORE[0] -= self.size//2 #pour moduler la difficulte
+            if SCORE[0] < 0: #pour ne pas avoir un score négatif
+                SCORE[0] = 0
             print("Score après : ", SCORE[0])
         if self.caught:
             self.caught = False
