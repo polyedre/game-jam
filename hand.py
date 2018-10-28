@@ -29,6 +29,8 @@ class Hand(pg.sprite.Sprite):
         self.head = _head
         self.mode = HUNTING
         self.target = None
+        self.def_pos = self.default_position()
+        self.rect.center = self.def_pos
 
     def default_position(self):
         if self.is_left:
@@ -103,9 +105,8 @@ class Hand(pg.sprite.Sprite):
             self.image = self.image_open
             self.choose_target()
             if self.target == None:
-                direction = self.default_position() - pg.Vector2(self.rect.center)
-                if direction.length() > 0 \
-                   and direction.length() < self.velocity: # to avoid flickering
+                direction = self.def_pos - pg.Vector2(self.rect.center)
+                if self.velocity < direction.length(): # to avoid flickering
                     self.rect.move_ip(direction.normalize() * self.velocity)
             else:
                 self.mode = FOLLOWING
