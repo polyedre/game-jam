@@ -92,6 +92,10 @@ class Page():
         while running:
 
             self.update()
+            if self.function:
+                liste = self.function()
+                for elem in liste:
+                    elem.add(self.sprite_list)
             if self.bg:
                 self.draw()
             if self.hooked_args:
