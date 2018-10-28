@@ -106,6 +106,9 @@ def updateMouseHistory():
 
 def handleGrab():
     "Update food that is grabbed."
+    # TODO: make grab distance proportionnal to size
+    # I think : create invisible sprite that follows the mouse
+    # and check for its intersection with food.rect
     mouse = pg.math.Vector2(pg.mouse.get_pos())
     for food in FOOD_LIST:
         center = pg.math.Vector2(food.rect.center)

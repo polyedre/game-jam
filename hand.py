@@ -32,9 +32,9 @@ class Hand(pg.sprite.Sprite):
 
     def default_position(self):
         if self.is_left:
-            def_x = self.head.rect.centerx - SCREEN_WIDTH//8
+            def_x = self.head.head_rect.centerx - SCREEN_WIDTH//8
         else:
-            def_x = self.head.rect.centerx + SCREEN_WIDTH//8
+            def_x = self.head.head_rect.centerx + SCREEN_WIDTH//8
         def_y = self.head.rect.centery + 10
         return pg.Vector2(def_x, def_y)        
     
