@@ -100,6 +100,7 @@ class Hand(pg.sprite.Sprite):
             But is looking for one
             If none is in its hunting zone, it will move to its default position
             """
+            self.image = self.image_open
             self.choose_target()
             if self.target == None:
                 direction = self.default_position() - pg.Vector2(self.rect.center)
@@ -116,6 +117,7 @@ class Hand(pg.sprite.Sprite):
                 * Hand catches target
                 * Target gets too far
             """
+            self.image = self.image_open
             if self.target.alive() \
                and self.side_rect.colliderect(self.target.rect):
                 if self.rect.colliderect(self.target.rect):
@@ -137,6 +139,7 @@ class Hand(pg.sprite.Sprite):
             When Hand and Head collide, the food can be eaten
             and Hand goes back to hunting
             """
+            self.image = self.image_closed
             direction = self.head.head_pos - pg.Vector2(self.rect.center)
             if direction.length() > 0:
                 self.rect.move_ip(direction.normalize() * self.velocity)

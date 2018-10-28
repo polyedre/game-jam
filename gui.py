@@ -15,13 +15,15 @@ class LoadingBar(pg.sprite.Sprite):
         self.rect.move_ip(rect[:2])
         self.interieur = pg.image.load(int_img).convert_alpha()
         self.interieur = pg.transform.scale(self.interieur, (300, 60))
-        self.image = self.exterieur
+        self.image = pg.surface.Surface((self.rect.width, self.rect.height))
+        self.image.blit(self.exterieur, (0,0))
         self.percentage = 0
 
     def update(self):
         global SCORE
         self.percentage = SCORE[0] / 1000
         largeur = (self.exterieur.get_rect().width - (self.offset_right + self.offset_left)) * self.percentage
+        self.image.blit(self.exterieur, (0, 0))
         self.image.blit(self.interieur, (0, 0), area=[0,0, largeur, 60])
 
 
