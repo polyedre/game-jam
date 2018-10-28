@@ -3,6 +3,7 @@
 
 import pygame as pg
 import random
+import sound
 from vars import *
 
 mouse_history = [(0, 0), (0, 0)]
@@ -59,12 +60,14 @@ class Aliment(pg.sprite.Sprite):
 
     def be_eaten(self):
         global SCORE
-        if not self.is_healthy:
-            SCORE[0] += self.size
         if self.is_healthy:
+            sound.salad_sound.play()
             SCORE[0] -= self.size // 2 #pour moduler la difficulte
             if SCORE[0] < 0: #pour ne pas avoir un score négatif
                 SCORE[0] = 0
+        else:
+            sound.hamburger_sound.play()
+            SCORE[0] += self.size
         if self.caught:
             self.caught = False
             self.master.target = None
