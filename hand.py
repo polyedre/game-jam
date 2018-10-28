@@ -36,8 +36,8 @@ class Hand(pg.sprite.Sprite):
         else:
             def_x = self.head.head_rect.centerx + SCREEN_WIDTH//8
         def_y = self.head.rect.centery + 10
-        return pg.Vector2(def_x, def_y)        
-    
+        return pg.Vector2(def_x, def_y)
+
     def min_couple(self, couple_list):
         min_dist = 0
         min_food = None
@@ -92,7 +92,7 @@ class Hand(pg.sprite.Sprite):
     #     dx *= coeff
     #     dy *= coeff
     #     self.move_by(dx, dy)
-    
+
     def update(self):
         if self.mode == HUNTING:
             """
@@ -103,16 +103,16 @@ class Hand(pg.sprite.Sprite):
             self.choose_target()
             if self.target == None:
                 direction = self.default_position() - pg.Vector2(self.rect.center)
-                if direction.length() < self.velocity: # to avoid flickering
-                    # otherwise goes back and forth around default_position
-                    self.rect.move_ip(direction.normalize() * self.velocity)                
+                if direction.length() > 0 \
+                   and direction.length() < self.velocity: # to avoid flickering
+                    self.rect.move_ip(direction.normalize() * self.velocity)
             else:
                 self.mode = FOLLOWING
         elif self.mode == FOLLOWING:
             """
             This mode is when Hand has a Sprite of type Aliment
             as target.
-            It keeps following it until: 
+            It keeps following it until:
                 * Hand catches target
                 * Target gets too far
             """
@@ -124,8 +124,8 @@ class Hand(pg.sprite.Sprite):
                     self.mode = EATING
                 else:
                     direction = pg.Vector2(self.target.rect.center) - pg.Vector2(self.rect.center)
-                    self.rect.move_ip(direction.normalize() * self.velocity)
-                    #print("FOLLOWING: ", self.target.rect.width, self.target.rect.height)
+                    if (direction.length() > 0):
+                        self.rect.move_ip(direction.normalize() * self.velocity)
             else:
                 self.mode = HUNTING
                 self.target = None
@@ -138,7 +138,7 @@ class Hand(pg.sprite.Sprite):
             and Hand goes back to hunting
             """
             direction = self.head.head_pos - pg.Vector2(self.rect.center)
-            if direction.length() != 0:
+            if direction.length() > 0:
                 self.rect.move_ip(direction.normalize() * self.velocity)
         else:
             """
